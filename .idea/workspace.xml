@@ -4,10 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit">
+    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: обновил requirements.txt">
+      <change afterPath="$PROJECT_DIR$/app/schemas/client.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/schemas/deal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/ai_assistant.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/ai_assistant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/deals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/deals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/notifications.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/models/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/deal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/schemas/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/__init__.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +67,7 @@
   "keyToString": {
     "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.main.executor": "Run",
     "Python.run.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
@@ -115,7 +127,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772222038305</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Initial commit: обновил requirements.txt">
+      <option name="closed" value="true" />
+      <created>1772265806363</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1772265806363</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -123,7 +143,13 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
@@ -132,6 +158,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit: CRM backend with FastAPI" />
     <MESSAGE value="Initial commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit" />
+    <MESSAGE value="Initial commit: обновил requirements.txt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: обновил requirements.txt" />
   </component>
 </project>
