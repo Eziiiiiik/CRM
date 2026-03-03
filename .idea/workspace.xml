@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit добавил пару фич, пофиксил пару ошибок, ещё предстоит куча работы эх">
-      <change afterPath="$PROJECT_DIR$/app/api/endpoints/enddeals.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/enums.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/deall.py" afterDir="false" />
+    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Добавил базу данных SqLite, начал реализовывать сделки. Остановился на статусах сделки">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/deal.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/client.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/endpoints/deals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/deals.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/schemas/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/deal.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/schemas/deall.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -139,7 +134,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772267923295</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Initial commit: Добавил базу данных SqLite, начал реализовывать сделки. Остановился на статусах сделки">
+      <option name="closed" value="true" />
+      <created>1772386138205</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1772386138205</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,6 +167,7 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Initial commit: обновил requirements.txt" />
     <MESSAGE value="Initial commit добавил пару фич, пофиксил пару ошибок, ещё предстоит куча работы эх" />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit добавил пару фич, пофиксил пару ошибок, ещё предстоит куча работы эх" />
+    <MESSAGE value="Initial commit: Добавил базу данных SqLite, начал реализовывать сделки. Остановился на статусах сделки" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Добавил базу данных SqLite, начал реализовывать сделки. Остановился на статусах сделки" />
   </component>
 </project>
