@@ -17,7 +17,7 @@ class Deal(Base):
 
     # Связь с клиентом (обязательное поле)
     client_id = Column(Integer, ForeignKey("clients.id", ondelete="CASCADE"), nullable=False)
-    client = relationship("Client", backref="deals")  # backref позволяет обращаться client.deals
+    client = relationship("Client", back_populates="deals")  # back_populates позволяет обращаться client.deals
 
     # Финансовая информация
     amount = Column(Float, default=0.0)  # Сумма сделки

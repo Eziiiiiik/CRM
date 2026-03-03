@@ -58,6 +58,12 @@ class DealResponse(DealBase):
 
 class DealWithClientResponse(DealResponse):
     """Сделка с полной информацией о клиенте"""
-    client: Optional[ClientResponse] = None
+    client: Optional['ClientResponse'] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+# ВАЖНО: ВЫЗОВ REBUILD ПОСЛЕ ВСЕХ КЛАССОВ!
+from app.schemas.client import ClientResponse
+
+DealWithClientResponse.model_rebuild()
