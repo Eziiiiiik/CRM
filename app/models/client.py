@@ -83,6 +83,13 @@ class Client(Base):
     # Связи с другими таблицами
     deals = relationship("Deal", back_populates="client", cascade="all, delete-orphan")
 
+    interactions = relationship(
+        "Interaction",
+        back_populates="client",
+        cascade="all, delete-orphan",
+        order_by="Interaction.created_at.desc()"
+    )
+
     @property
     def full_name(self) -> str:
         """Полное имя"""
