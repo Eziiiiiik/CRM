@@ -4,15 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Добавил сегментацию клиентов для упрощения работы.">
-      <change afterPath="$PROJECT_DIR$/app/core/segment_engine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/deals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/deals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/enddeals.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/segments.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/segments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-    </list>
+    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Добавил логирование(пока не рабочее)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -177,7 +169,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772694854580</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Initial commit: Добавил логирование(пока не рабочее)">
+      <option name="closed" value="true" />
+      <created>1772699272090</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1772699272090</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -207,6 +207,7 @@
     <MESSAGE value="Initial commit: Сделал карточки клиентов, с полными данными." />
     <MESSAGE value="Initial commit: Добавил главную страницу. А также добавил взаимодействия между исполнителем и клиентом" />
     <MESSAGE value="Initial commit: Добавил сегментацию клиентов для упрощения работы." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Добавил сегментацию клиентов для упрощения работы." />
+    <MESSAGE value="Initial commit: Добавил логирование(пока не рабочее)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Добавил логирование(пока не рабочее)" />
   </component>
 </project>
