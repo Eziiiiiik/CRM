@@ -7,6 +7,7 @@ from app.api.endpoints import clients, deals
 from app.api.endpoints import clients, deals, dashboard
 from datetime import datetime
 from fastapi.responses import HTMLResponse
+from app.api.endpoints import clients, deals, dashboard, interactions, segments
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,6 +30,7 @@ app.include_router(clients.router, prefix="/api/v1")
 app.include_router(deals.router, prefix="/api/v1")
 app.include_router(dashboard.router, prefix="/api/v1")
 app.include_router(interactions.router, prefix="/api/v1")
+app.include_router(segments.router, prefix="/api/v1")
 
 @app.get("/", response_class=HTMLResponse)
 async def root_html():

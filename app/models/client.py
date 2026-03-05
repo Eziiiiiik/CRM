@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, Date, J
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.core.database import Base
+from app.models.segment import client_segments
 import json
 
 # Таблица для связи многие-ко-многим (теги клиентов)
@@ -59,6 +60,13 @@ class Client(Base):
     position = Column(String(255))  # Должность
     industry = Column(String(100))  # Сфера деятельности
     website = Column(String(255))
+
+    segments = relationship(
+        "Segment",
+        secondary=client_segments,
+        back_populates="clients",
+        passive_deletes=True
+    )
 
     # Настройки коммуникации
     communication_preferences = Column(JSON,
