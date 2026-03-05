@@ -199,6 +199,24 @@ async def get_segment_clients(
         for c in clients
     ]
 
+@router.post("/refresh-all")
+async def refresh_all_segments(
+        db: AsyncSession = Depends(get_db)
+):
+    """
+    Запустить пересчёт всех активных сегментов
+    """
+    from app.core.segment_engine import SegmentUpdater
+
+    updater = SegmentUpdater(db)
+    result = await updater.update_all_segments()
+
+    return {
+        "message": "Segments refresh completed",
+        "updated_segments": result["updated_segments"],
+        "timestamp": datetime.now().isoformat()
+    }
+
 
 @router.post("/{segment_id}/refresh")
 async def refresh_segment(
@@ -206,19 +224,21 @@ async def refresh_segment(
         db: AsyncSession = Depends(get_db)
 ):
     """
-    Принудительно пересчитать сегмент
+    Пересчитать конкретный сегмент
     """
-    segment = await db.get(Segment, segment_id)
-    if not segment:
+    from app.core.segment_engine import SegmentUpdater
+
+    updater = SegmentUpdater(db)
+    result = await updater.update_segment(segment_id)
+
+    if "error" in result:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Segment with id {segment_id} not found"
+            detail=result["error"]
         )
 
-    # TODO: Здесь будет логика пересчёта сегмента
-    # Пока просто обновляем дату
-
-    segment.last_calculated_at = datetime.now()
-    await db.commit()
-
-    return {"message": "Segment refresh started", "segment_id": segment_id}
+    return {
+        "message": "Segment refresh completed",
+        "data": result,
+        "timestamp": datetime.now().isoformat()
+    }

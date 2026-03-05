@@ -5,6 +5,8 @@ from sqlalchemy import select, or_, and_
 from sqlalchemy.orm import selectinload
 from datetime import date
 
+
+
 from app.core.database import get_db
 from app.models.client import Client, Tag
 from app.schemas.client import (
@@ -145,6 +147,12 @@ async def create_client(
     await db.refresh(client)
     return client
 
+    from app.core.segment_engine import SegmentUpdater
+
+    # После создания клиента, обновляем сегменты
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
+
 
 @router.put("/{client_id}", response_model=ClientResponse)
 async def update_client(
@@ -179,6 +187,12 @@ async def update_client(
     await db.refresh(client)
     return client
 
+    from app.core.segment_engine import SegmentUpdater
+
+    # После создания клиента, обновляем сегменты
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
+
 
 @router.delete("/{client_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_client(
@@ -197,6 +211,12 @@ async def delete_client(
 
     client.is_active = False
     await db.commit()
+
+    from app.core.segment_engine import SegmentUpdater
+
+    # После создания клиента, обновляем сегменты
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
 
 
 @router.post("/{client_id}/restore", response_model=ClientResponse)

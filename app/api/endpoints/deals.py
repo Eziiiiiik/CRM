@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, and_
 from sqlalchemy.orm import selectinload
+from datetime import datetime
 
 from app.core.database import get_db
 from app.models.deal import Deal
@@ -151,6 +152,11 @@ async def create_deal(
 
     return deal
 
+    from app.core.segment_engine import SegmentUpdater
+
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
+
 
 @router.put("/{deal_id}", response_model=DealResponse)
 async def update_deal(
@@ -187,6 +193,11 @@ async def update_deal(
     await db.refresh(deal)
     return deal
 
+    from app.core.segment_engine import SegmentUpdater
+
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
+
 
 @router.post("/{deal_id}/close", response_model=DealResponse)
 async def close_deal(
@@ -220,6 +231,11 @@ async def close_deal(
     await db.refresh(deal)
     return deal
 
+    from app.core.segment_engine import SegmentUpdater
+
+    updater = SegmentUpdater(db)
+    await updater.update_client_segments(client.id)
+
 
 @router.delete("/{deal_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_deal(
@@ -234,7 +250,9 @@ async def delete_deal(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Deal with id {deal_id} not found"
+
         )
+
 
     await db.delete(deal)
     await db.commit()

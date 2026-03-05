@@ -3,11 +3,54 @@ from app.api.endpoints import clients
 from app.api.endpoints import clients, deals, dashboard, interactions
 from app.core.database import init_db
 from contextlib import asynccontextmanager
+from app.core.database import init_db, AsyncSessionLocal
 from app.api.endpoints import clients, deals
 from app.api.endpoints import clients, deals, dashboard
 from datetime import datetime
+from app.core.segment_engine import SegmentUpdater
 from fastapi.responses import HTMLResponse
 from app.api.endpoints import clients, deals, dashboard, interactions, segments
+import asyncio
+import logging
+from typing import Optional
+
+logger = logging.getLogger(__name__)
+
+
+# Фоновая задача для обновления сегментов
+async def update_segments_periodically(shutdown_event: asyncio.Event):
+    """Запускает обновление сегментов каждый час"""
+    while not shutdown_event.is_set():
+        try:
+            logger.info("🔄 Запуск автоматического обновления сегментов...")
+
+            # Создаём новую сессию для каждого цикла
+            async with AsyncSessionLocal() as db:
+                updater = SegmentUpdater(db)
+                result = await updater.update_all_segments()
+                logger.info(f"✅ Обновлено {result['updated_segments']} сегментов")
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка при обновлении сегментов: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+
+        # Ждём 1 час или пока не поступит сигнал остановки
+        try:
+            # asyncio.sleep с возможностью прерывания
+            await asyncio.wait_for(
+                shutdown_event.wait(),
+                timeout=3600  # 1 час
+            )
+        except asyncio.TimeoutError:
+            # Нормальное завершение ожидания, продолжаем цикл
+            continue
+        except asyncio.CancelledError:
+            # Задача отменена
+            break
+
+    logger.info("🛑 Фоновая задача обновления сегментов остановлена")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,8 +59,48 @@ async def lifespan(app: FastAPI):
     await init_db()
     print("✅ База данных готова")
     yield
-    # Shutdown
-    print("👋 Приложение остановлено")
+
+    task = asyncio.create_task(update_segments_periodically())
+    print("🔄 Фоновая задача обновления сегментов запущена")
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        print("🚀 Создаем таблицы в БД...")
+        await init_db()
+        print("✅ База данных готова")
+
+        # Создаём событие для остановки фоновой задачи
+        shutdown_event = asyncio.Event()
+
+        # Запускаем фоновую задачу для обновления сегментов
+        task = asyncio.create_task(
+            update_segments_periodically(shutdown_event)
+        )
+        print("🔄 Фоновая задача обновления сегментов запущена")
+
+        try:
+            yield
+        finally:
+            # Сигнализируем фоновой задаче о необходимости остановки
+            print("🛑 Останавливаем фоновую задачу...")
+            shutdown_event.set()
+
+            # Даём задаче время на завершение
+            try:
+                await asyncio.wait_for(task, timeout=5.0)
+            except asyncio.TimeoutError:
+                print("⚠️ Фоновая задача не завершилась вовремя, принудительно отменяем")
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+            except Exception as e:
+                print(f"⚠️ Ошибка при остановке фоновой задачи: {e}")
+
+            print("👋 Приложение остановлено")
+
+
 
 app = FastAPI(
     title="CRM System",
