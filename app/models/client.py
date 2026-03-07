@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.core.database import Base
 from app.models.segment import client_segments
-import json
+
 
 # Таблица для связи многие-ко-многим (теги клиентов)
 client_tags = Table(
@@ -25,7 +25,6 @@ class Tag(Base):
 
 
 class Client(Base):
-
     __tablename__ = "clients"
 
     # Основная информация
@@ -47,20 +46,17 @@ class Client(Base):
     alternative_phone = Column(String(20))
 
     # Мессенджеры (храним как JSON для гибкости)
-    messengers = Column(JSON, default=list)  # [{"type": "telegram", "value": "@username"}, ...]
-
-    # Социальные сети
-    social_networks = Column(JSON, default=list)  # [{"type": "vk", "url": "vk.com/id123"}, ...]
-
-    # Адреса (может быть несколько)
-    addresses = Column(JSON, default=list)  # [{"type": "home", "country": "РФ", "city": "Москва", ...}]
+    messengers = Column(JSON, default=list)
+    social_networks = Column(JSON, default=list)
+    addresses = Column(JSON, default=list)
 
     # Профессиональная информация
     company = Column(String(255))
-    position = Column(String(255))  # Должность
-    industry = Column(String(100))  # Сфера деятельности
+    position = Column(String(255))
+    industry = Column(String(100))
     website = Column(String(255))
 
+    # Связи
     segments = relationship(
         "Segment",
         secondary=client_segments,
@@ -68,11 +64,7 @@ class Client(Base):
         passive_deletes=True
     )
 
-    # Настройки коммуникации
-    communication_preferences = Column(JSON,
-                                       default=dict)  # {"preferred_channel": "telegram", "do_not_call": False, ...}
-
-    # Дополнительные заметки
+    communication_preferences = Column(JSON, default=dict)
     notes = Column(Text)
 
     # Теги (связь многие-ко-многим)
@@ -80,17 +72,16 @@ class Client(Base):
 
     # Системная информация
     is_active = Column(Boolean, default=True)
-    is_verified = Column(Boolean, default=False)  # Подтверждён ли email/телефон
-    source = Column(String(50))  # Откуда пришёл клиент (сайт, реклама, рекомендация)
+    is_verified = Column(Boolean, default=False)
+    source = Column(String(50))
 
     # Временные метки
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
-    last_contact_at = Column(DateTime(timezone=True))  # Последний контакт
+    last_contact_at = Column(DateTime(timezone=True))
 
     # Связи с другими таблицами
     deals = relationship("Deal", back_populates="client", cascade="all, delete-orphan")
-
     interactions = relationship(
         "Interaction",
         back_populates="client",
@@ -101,8 +92,9 @@ class Client(Base):
     @property
     def full_name(self) -> str:
         """Полное имя"""
+        # Вариант 1: Игнорировать предупреждение
         parts = [self.last_name, self.first_name, self.middle_name]
-        return " ".join(p for p in parts if p)
+        return " ".join(p for p in parts if p)  # type: ignore
 
     @property
     def short_name(self) -> str:
@@ -112,7 +104,7 @@ class Client(Base):
             initials += self.first_name[0].upper() + "."
         if self.middle_name:
             initials += self.middle_name[0].upper() + "."
-        return f"{self.last_name} {initials}".strip()
+        return f"{self.last_name} {initials}".strip()  # type: ignore
 
     def __repr__(self):
         return f"<Client(id={self.id}, name={self.full_name})>"

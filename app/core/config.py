@@ -26,8 +26,6 @@ class Settings(BaseSettings):
 
     # Настройки базы данных (используем SQLite для простоты старта)
     DATABASE_URL: str = "sqlite+aiosqlite:///./crm.db"
-    # Для PostgreSQL (раскомментировать когда будет готов)
-    # DATABASE_URL: str = "postgresql+asyncpg://postgres:password@localhost/crm_db"
 
     # Настройки Redis для уведомлений
     REDIS_URL: str = "redis://localhost:6379/0"

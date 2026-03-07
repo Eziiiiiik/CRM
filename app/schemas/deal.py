@@ -62,8 +62,4 @@ class DealWithClientResponse(DealResponse):
 
     model_config = ConfigDict(from_attributes=True)
 
-
-# ВАЖНО: ВЫЗОВ REBUILD ПОСЛЕ ВСЕХ КЛАССОВ!
-from app.schemas.client import ClientResponse
-
 DealWithClientResponse.model_rebuild()

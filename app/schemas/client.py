@@ -1,6 +1,6 @@
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
 from datetime import date, datetime
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 from enum import Enum
 
 
@@ -23,8 +23,6 @@ class MessengerType(str, Enum):
     VIBER = "viber"
     SIGNAL = "signal"
     THREEMA = "threema"
-    WECHAT = "wechat"
-    OTHER = "other"
 
 
 class SocialNetworkType(str, Enum):
@@ -55,10 +53,9 @@ class CommunicationChannel(str, Enum):
     VK = "vk"
 
 
-# Вложенные схемы
 class MessengerBase(BaseModel):
     type: MessengerType
-    value: str  # @username или номер телефона
+    value: str
     is_primary: bool = False
     notes: Optional[str] = None
 
@@ -87,7 +84,7 @@ class CommunicationPreferences(BaseModel):
     do_not_call: bool = False
     do_not_email: bool = False
     do_not_sms: bool = False
-    best_time_to_call: Optional[str] = None  # "morning", "afternoon", "evening"
+    best_time_to_call: Optional[str] = None
     notes: Optional[str] = None
 
 
@@ -107,44 +104,35 @@ class TagResponse(TagBase):
     model_config = ConfigDict(from_attributes=True)
 
 
-# Основные схемы клиента
 class ClientBase(BaseModel):
-    # ФИО
     last_name: str = Field(..., min_length=1, max_length=100)
     first_name: str = Field(..., min_length=1, max_length=100)
     middle_name: Optional[str] = Field(None, max_length=100)
 
-    # Личная информация
     birth_date: Optional[date] = None
     gender: Optional[GenderEnum] = None
     marital_status: Optional[MaritalStatusEnum] = None
 
-    # Контакты
     email: EmailStr
     phone: Optional[str] = Field(None, pattern=r'^\+?[0-9\-\s]{10,20}$')
     alternative_phone: Optional[str] = Field(None, pattern=r'^\+?[0-9\-\s]{10,20}$')
 
-    # Мессенджеры и соцсети
     messengers: List[MessengerBase] = []
     social_networks: List[SocialNetworkBase] = []
-
-    # Адреса
     addresses: List[AddressBase] = []
 
-    # Профессиональная информация
     company: Optional[str] = None
     position: Optional[str] = None
     industry: Optional[str] = None
     website: Optional[str] = Field(None, pattern=r'^https?://.+')
 
-    # Настройки
     communication_preferences: CommunicationPreferences = CommunicationPreferences()
 
-    # Дополнительно
     notes: Optional[str] = None
     source: Optional[str] = None
 
     @field_validator('birth_date')
+    @classmethod  # ← добавили classmethod
     def validate_birth_date(cls, v):
         if v and v > date.today():
             raise ValueError('Birth date cannot be in the future')
@@ -156,7 +144,6 @@ class ClientCreate(ClientBase):
 
 
 class ClientUpdate(BaseModel):
-    # Все поля опциональны для частичного обновления
     last_name: Optional[str] = Field(None, min_length=1, max_length=100)
     first_name: Optional[str] = Field(None, min_length=1, max_length=100)
     middle_name: Optional[str] = Field(None, max_length=100)
@@ -189,7 +176,6 @@ class ClientResponse(ClientBase):
     last_contact_at: Optional[datetime] = None
     tags: List[TagResponse] = []
 
-    # Добавляем производные поля
     full_name: str
     short_name: str
 
@@ -203,7 +189,7 @@ class ClientDetailResponse(ClientResponse):
     model_config = ConfigDict(from_attributes=True)
 
 
-# ВАЖНО: ВЫЗОВ REBUILD ПОСЛЕ ВСЕХ КЛАССОВ!
+# В самом конце файла
 from app.schemas.deal import DealResponse
 
 ClientDetailResponse.model_rebuild()

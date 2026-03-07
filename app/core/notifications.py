@@ -3,9 +3,8 @@
 Упрощенная версия без Redis для начала разработки.
 """
 from typing import Dict, Set
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket
 import asyncio
-import json
 from app.core.config import get_settings
 
 settings = get_settings()
@@ -67,8 +66,9 @@ class ConnectionManager:
             for connection in list(self.active_connections[user_id]):
                 try:
                     await connection.send_json(message)
-                except:
-                    # Если отправка не удалась, удаляем соединение
+                except (RuntimeError, ConnectionError) as e:  # ← конкретные исключения
+                    # Если отправка не удалась (соединение закрыто или ошибка сети), удаляем соединение
+                    print(f"⚠️ Ошибка отправки пользователю {user_id}: {e}")
                     await self.disconnect(connection, user_id)
 
     async def broadcast(self, message: dict):

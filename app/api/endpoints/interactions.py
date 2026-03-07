@@ -23,8 +23,8 @@ async def get_interactions(
         limit: int = Query(100, ge=1, le=1000),
         client_id: Optional[int] = Query(None, description="Фильтр по клиенту"),
         deal_id: Optional[int] = Query(None, description="Фильтр по сделке"),
-        type: Optional[InteractionType] = Query(None, description="Тип взаимодействия"),
-        status: Optional[InteractionStatus] = Query(None, description="Статус"),
+        interaction_type: Optional[InteractionType] = Query(None, description="Тип взаимодействия"),  # переименовано
+        interaction_status: Optional[InteractionStatus] = Query(None, description="Статус"),  # переименовано
         date_from: Optional[datetime] = Query(None, description="Начало периода"),
         date_to: Optional[datetime] = Query(None, description="Конец периода"),
         search: Optional[str] = Query(None, description="Поиск по заголовку и описанию"),
@@ -40,6 +40,14 @@ async def get_interactions(
 
     # Применяем фильтры
     filters = []
+    if client_id:
+        filters.append(Interaction.client_id == client_id)
+    if deal_id:
+        filters.append(Interaction.deal_id == deal_id)
+    if interaction_type:  # ← используем новое имя
+        filters.append(Interaction.type == interaction_type)
+    if interaction_status:  # ← используем новое имя
+        filters.append(Interaction.status == interaction_status)
     if client_id:
         filters.append(Interaction.client_id == client_id)
     if deal_id:

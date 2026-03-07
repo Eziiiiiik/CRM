@@ -1,8 +1,12 @@
 """
 WebSocket эндпоинты для уведомлений в реальном времени.
 """
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 from app.core.notifications import manager
+import logging
+from datetime import datetime  # ← добавьте эту строку!
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(tags=["notifications"])
 
@@ -25,13 +29,20 @@ async def websocket_endpoint(
             "message": f"Connected as user {user_id}"
         })
 
-        # Слушаем входящие сообщения (если нужно)
+        # Обрабатываем входящие сообщения
         while True:
             data = await websocket.receive_text()
-            # Здесь можно обрабатывать сообщения от клиента
-            # Например, подписка на определенные события
+            logger.info(f"WebSocket сообщение от пользователя {user_id}: {data}")
+
+            # Отправляем подтверждение с временной меткой
+            await websocket.send_json({
+                "type": "message_received",
+                "data": data,
+                "timestamp": datetime.now().isoformat()  # ← здесь используется datetime
+            })
 
     except WebSocketDisconnect:
+        logger.info(f"Пользователь {user_id} отключился")
         await manager.disconnect(websocket, user_id)
         await manager.publish_notification(
             "system",

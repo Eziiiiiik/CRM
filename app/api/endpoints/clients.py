@@ -1,11 +1,9 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, or_, and_
+from sqlalchemy import select, or_
 from sqlalchemy.orm import selectinload
-from datetime import date
-
-
+# from datetime import date  ← УДАЛЕНО!
 
 from app.core.database import get_db
 from app.models.client import Client, Tag
@@ -13,6 +11,7 @@ from app.schemas.client import (
     ClientCreate, ClientUpdate, ClientResponse,
     ClientDetailResponse, TagCreate, TagResponse
 )
+from app.core.segment_engine import SegmentUpdater
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
@@ -26,8 +25,7 @@ async def get_clients(
         search: Optional[str] = Query(None, description="Поиск по имени, email, телефону"),
         tag: Optional[str] = Query(None, description="Фильтр по тегу"),
         is_active: Optional[bool] = Query(None, description="Фильтр по статусу"),
-        min_age: Optional[int] = Query(None, ge=0, le=150),
-        max_age: Optional[int] = Query(None, ge=0, le=150),
+        # Параметры min_age и max_age УДАЛЕНЫ
         db: AsyncSession = Depends(get_db)
 ):
     """
@@ -54,17 +52,12 @@ async def get_clients(
     if is_active is not None:
         query = query.where(Client.is_active == is_active)
 
-    # Фильтр по возрасту (требует вычисления, упрощённо)
-    if min_age is not None or max_age is not None:
-        today = date.today()
-        # Это упрощение, в реальности нужно вычислять возраст
-        # Можно добавить birthday search
+    # Блок с фильтром по возрасту ПОЛНОСТЬЮ УДАЛЕН
 
     query = query.offset(skip).limit(limit).order_by(Client.created_at.desc())
     result = await db.execute(query)
     clients = result.scalars().all()
     return clients
-
 
 @router.get("/stats", response_model=dict)
 async def get_clients_stats(
@@ -80,11 +73,9 @@ async def get_clients_stats(
     active = sum(1 for c in clients if c.is_active)
     verified = sum(1 for c in clients if c.is_verified)
 
-    # Статистика по полу
     male = sum(1 for c in clients if c.gender == "male")
     female = sum(1 for c in clients if c.gender == "female")
 
-    # Статистика по источникам
     sources = {}
     for c in clients:
         if c.source:
@@ -145,13 +136,12 @@ async def create_client(
     db.add(client)
     await db.commit()
     await db.refresh(client)
-    return client
 
-    from app.core.segment_engine import SegmentUpdater
-
-    # После создания клиента, обновляем сегменты
+    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
+
+    return client
 
 
 @router.put("/{client_id}", response_model=ClientResponse)
@@ -185,13 +175,12 @@ async def update_client(
 
     await db.commit()
     await db.refresh(client)
-    return client
 
-    from app.core.segment_engine import SegmentUpdater
-
-    # После создания клиента, обновляем сегменты
+    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
+
+    return client
 
 
 @router.delete("/{client_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -212,9 +201,7 @@ async def delete_client(
     client.is_active = False
     await db.commit()
 
-    from app.core.segment_engine import SegmentUpdater
-
-    # После создания клиента, обновляем сегменты
+    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
 

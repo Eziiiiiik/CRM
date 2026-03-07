@@ -69,7 +69,7 @@ class Interaction(Base):
     contact_phone = Column(String(20))
     contact_email = Column(String(255))
 
-    # Дополнительные данные - ИСПРАВЛЕНО: metadata -> additional_data
+    # Дополнительные данные
     additional_data = Column(JSON, default=dict)
 
     # Системные метки
@@ -84,5 +84,11 @@ class Interaction(Base):
     def is_overdue(self) -> bool:
         """Проверка, просрочено ли запланированное взаимодействие"""
         if self.status == InteractionStatus.PLANNED and self.scheduled_at:
-            return self.scheduled_at < datetime.now()
+            # Получаем значение scheduled_at и преобразуем в naive datetime
+            scheduled = self.scheduled_at
+            if isinstance(scheduled, datetime):
+                # Убираем timezone для сравнения
+                scheduled_naive = scheduled.replace(tzinfo=None)
+                now_naive = datetime.now().replace(tzinfo=None)
+                return scheduled_naive < now_naive
         return False

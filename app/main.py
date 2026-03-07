@@ -1,30 +1,23 @@
 from fastapi_offline import FastAPIOffline as FastAPI
-from app.api.endpoints import clients
-from app.api.endpoints import clients, deals, dashboard, interactions
-from app.core.database import init_db
-from contextlib import asynccontextmanager
-from app.core.database import init_db, AsyncSessionLocal
-from app.api.endpoints import clients, deals
-from app.api.endpoints import clients, deals, dashboard
-from datetime import datetime
-from app.core.segment_engine import SegmentUpdater
 from fastapi.responses import HTMLResponse
-from app.api.endpoints import clients, deals, dashboard, interactions, segments
+from contextlib import asynccontextmanager
 import asyncio
 import logging
-from typing import Optional
+
+
+from app.api.endpoints import clients, deals, dashboard, interactions, segments
+from app.core.database import init_db, AsyncSessionLocal
+from app.core.segment_engine import SegmentUpdater
 
 logger = logging.getLogger(__name__)
 
 
-# Фоновая задача для обновления сегментов
 async def update_segments_periodically(shutdown_event: asyncio.Event):
     """Запускает обновление сегментов каждый час"""
     while not shutdown_event.is_set():
         try:
             logger.info("🔄 Запуск автоматического обновления сегментов...")
 
-            # Создаём новую сессию для каждого цикла
             async with AsyncSessionLocal() as db:
                 updater = SegmentUpdater(db)
                 result = await updater.update_all_segments()
@@ -35,71 +28,45 @@ async def update_segments_periodically(shutdown_event: asyncio.Event):
             import traceback
             logger.error(traceback.format_exc())
 
-        # Ждём 1 час или пока не поступит сигнал остановки
         try:
-            # asyncio.sleep с возможностью прерывания
-            await asyncio.wait_for(
-                shutdown_event.wait(),
-                timeout=3600  # 1 час
-            )
+            await asyncio.wait_for(shutdown_event.wait(), timeout=3600)
         except asyncio.TimeoutError:
-            # Нормальное завершение ожидания, продолжаем цикл
             continue
         except asyncio.CancelledError:
-            # Задача отменена
             break
 
     logger.info("🛑 Фоновая задача обновления сегментов остановлена")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup: создаем таблицы
+async def lifespan(_app):  # _app показывает, что параметр не используется
     print("🚀 Создаем таблицы в БД...")
     await init_db()
     print("✅ База данных готова")
-    yield
 
-    task = asyncio.create_task(update_segments_periodically())
+    shutdown_event = asyncio.Event()
+    task = asyncio.create_task(update_segments_periodically(shutdown_event))
     print("🔄 Фоновая задача обновления сегментов запущена")
 
-    @asynccontextmanager
-    async def lifespan(app: FastAPI):
-        print("🚀 Создаем таблицы в БД...")
-        await init_db()
-        print("✅ База данных готова")
-
-        # Создаём событие для остановки фоновой задачи
-        shutdown_event = asyncio.Event()
-
-        # Запускаем фоновую задачу для обновления сегментов
-        task = asyncio.create_task(
-            update_segments_periodically(shutdown_event)
-        )
-        print("🔄 Фоновая задача обновления сегментов запущена")
+    try:
+        yield
+    finally:
+        print("🛑 Останавливаем фоновую задачу...")
+        shutdown_event.set()
 
         try:
-            yield
-        finally:
-            # Сигнализируем фоновой задаче о необходимости остановки
-            print("🛑 Останавливаем фоновую задачу...")
-            shutdown_event.set()
-
-            # Даём задаче время на завершение
+            await asyncio.wait_for(task, timeout=5.0)
+        except asyncio.TimeoutError:
+            print("⚠️ Фоновая задача не завершилась вовремя, принудительно отменяем")
+            task.cancel()
             try:
-                await asyncio.wait_for(task, timeout=5.0)
-            except asyncio.TimeoutError:
-                print("⚠️ Фоновая задача не завершилась вовремя, принудительно отменяем")
-                task.cancel()
-                try:
-                    await task
-                except asyncio.CancelledError:
-                    pass
-            except Exception as e:
-                print(f"⚠️ Ошибка при остановке фоновой задачи: {e}")
+                await task
+            except asyncio.CancelledError:
+                pass
+        except Exception as e:
+            print(f"⚠️ Ошибка при остановке фоновой задачи: {e}")
 
-            print("👋 Приложение остановлено")
-
+        print("👋 Приложение остановлено")
 
 
 app = FastAPI(
@@ -108,12 +75,13 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Подключаем роутер клиентов
+# Подключаем роутеры
 app.include_router(clients.router, prefix="/api/v1")
 app.include_router(deals.router, prefix="/api/v1")
 app.include_router(dashboard.router, prefix="/api/v1")
 app.include_router(interactions.router, prefix="/api/v1")
 app.include_router(segments.router, prefix="/api/v1")
+
 
 @app.get("/", response_class=HTMLResponse)
 async def root_html():

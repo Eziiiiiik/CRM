@@ -1,11 +1,12 @@
 """
 Настройки подключения к базе данных.
 Используем SQLAlchemy с асинхронным драйвером.
-Поддерживает SQLite (для разработки) и PostgreSQL (для продакшена).
+Поддерживает SQLite (для разработки).
 """
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 from app.core.config import get_settings
+from typing import AsyncGenerator
 
 settings = get_settings()
 
@@ -19,7 +20,6 @@ if 'sqlite' in settings.DATABASE_URL:
         connect_args={"check_same_thread": False}  # Нужно для SQLite
     )
 else:
-    # Для PostgreSQL
     engine = create_async_engine(
         settings.DATABASE_URL,
         echo=True,
@@ -37,7 +37,7 @@ AsyncSessionLocal = async_sessionmaker(
 Base = declarative_base()
 
 
-async def get_db() -> AsyncSession:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:  # ← ИСПРАВЛЕНО
     """
     Зависимость для получения сессии базы данных.
     Используется в эндпоинтах FastAPI.
@@ -52,6 +52,6 @@ async def get_db() -> AsyncSession:
 
 async def init_db():
     """Инициализация базы данных (создание таблиц)."""
-    async with engine.begin() as conn:
-        # Создаем все таблицы
+    async with engine.connect() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await conn.commit()

@@ -13,6 +13,7 @@ from app.schemas.deal import (
     DealCreate, DealUpdate, DealResponse,
     DealWithClientResponse, DealClose
 )
+from app.core.segment_engine import SegmentUpdater  # импорт вынесен наверх
 
 router = APIRouter(prefix="/deals", tags=["deals"])
 
@@ -21,7 +22,7 @@ router = APIRouter(prefix="/deals", tags=["deals"])
 async def get_deals(
         skip: int = Query(0, ge=0, description="Сколько пропустить"),
         limit: int = Query(100, ge=1, le=1000, description="Сколько вернуть"),
-        status: Optional[DealStatus] = Query(None, description="Фильтр по статусу"),
+        status_param: Optional[DealStatus] = Query(None, description="Фильтр по статусу"),  # переименовано
         client_id: Optional[int] = Query(None, description="Фильтр по клиенту"),
         min_amount: Optional[float] = Query(None, ge=0, description="Минимальная сумма"),
         max_amount: Optional[float] = Query(None, ge=0, description="Максимальная сумма"),
@@ -34,8 +35,8 @@ async def get_deals(
 
     # Применяем фильтры
     filters = []
-    if status:
-        filters.append(Deal.status == status)
+    if status_param:  # используем новое имя
+        filters.append(Deal.status == status_param)
     if client_id:
         filters.append(Deal.client_id == client_id)
     if min_amount is not None:
@@ -88,11 +89,11 @@ async def get_deals_stats(
 
     # Статистика по статусам
     status_stats = {}
-    for status in DealStatus:
-        count = sum(1 for d in deals if d.status == status)
-        amount = sum(d.amount for d in deals if d.status == status)
+    for deal_status in DealStatus:  # переименовано, чтобы не затенять
+        count = sum(1 for d in deals if d.status == deal_status)
+        amount = sum(d.amount for d in deals if d.status == deal_status)
         if count > 0:
-            status_stats[status.value] = {
+            status_stats[deal_status.value] = {
                 "count": count,
                 "amount": amount
             }
@@ -150,12 +151,11 @@ async def create_deal(
     await db.commit()
     await db.refresh(deal)
 
-    return deal
-
-    from app.core.segment_engine import SegmentUpdater
-
+    # Обновляем сегменты клиента (ПЕРЕД return)
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
+
+    return deal
 
 
 @router.put("/{deal_id}", response_model=DealResponse)
@@ -174,6 +174,9 @@ async def update_deal(
             detail=f"Deal with id {deal_id} not found"
         )
 
+    # Получаем клиента для обновления сегментов
+    client = await db.get(Client, deal.client_id)
+
     # Обновляем поля
     update_data = deal_data.model_dump(exclude_unset=True)
 
@@ -191,12 +194,13 @@ async def update_deal(
 
     await db.commit()
     await db.refresh(deal)
+
+    # Обновляем сегменты клиента (ПЕРЕД return)
+    if client:
+        updater = SegmentUpdater(db)
+        await updater.update_client_segments(client.id)
+
     return deal
-
-    from app.core.segment_engine import SegmentUpdater
-
-    updater = SegmentUpdater(db)
-    await updater.update_client_segments(client.id)
 
 
 @router.post("/{deal_id}/close", response_model=DealResponse)
@@ -222,6 +226,9 @@ async def close_deal(
             detail=f"Deal is already closed with status {deal.status}"
         )
 
+    # Получаем клиента для обновления сегментов
+    client = await db.get(Client, deal.client_id)
+
     # Обновляем статус и дату закрытия
     deal.status = close_data.status
     deal.close_reason = close_data.close_reason
@@ -229,12 +236,13 @@ async def close_deal(
 
     await db.commit()
     await db.refresh(deal)
+
+    # Обновляем сегменты клиента (ПЕРЕД return)
+    if client:
+        updater = SegmentUpdater(db)
+        await updater.update_client_segments(client.id)
+
     return deal
-
-    from app.core.segment_engine import SegmentUpdater
-
-    updater = SegmentUpdater(db)
-    await updater.update_client_segments(client.id)
 
 
 @router.delete("/{deal_id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -250,9 +258,15 @@ async def delete_deal(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Deal with id {deal_id} not found"
-
         )
 
+    # Получаем клиента для обновления сегментов ДО удаления
+    client = await db.get(Client, deal.client_id)
 
     await db.delete(deal)
     await db.commit()
+
+    # Обновляем сегменты клиента ПОСЛЕ удаления
+    if client:
+        updater = SegmentUpdater(db)
+        await updater.update_client_segments(client.id)

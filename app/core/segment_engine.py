@@ -4,10 +4,10 @@
 """
 
 import logging
-from datetime import datetime, timedelta
-from typing import Dict, Any, List, Optional
+from datetime import datetime
+from typing import Dict, Any, List
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select
 import operator
 
 from app.models.client import Client
@@ -17,6 +17,7 @@ from app.models.enums import DealStatus
 from app.models.segment import Segment, client_segments
 
 logger = logging.getLogger(__name__)
+
 
 class SegmentEngine:
     """Движок для вычисления принадлежности клиента к сегментам"""
@@ -123,7 +124,8 @@ class SegmentEngine:
             "created_at": client.created_at,
         }
 
-    def _evaluate_rule(self, client_data: Dict[str, Any], rule: Dict[str, Any]) -> bool:
+    @staticmethod
+    def _evaluate_rule(client_data: Dict[str, Any], rule: Dict[str, Any]) -> bool:
         """
         Проверяет одно правило для клиента
         """
@@ -160,7 +162,7 @@ class SegmentEngine:
 
         try:
             return op_func(actual_value, expected_value)
-        except Exception:
+        except (TypeError, ValueError, KeyError):
             return False
 
 
@@ -209,7 +211,6 @@ class SegmentUpdater:
                     matched_client_ids.append(client.id)
 
             # Обновляем связи в БД
-            # Удаляем старые связи
             await self.db.execute(
                 client_segments.delete().where(client_segments.c.segment_id == segment_id)
             )
@@ -234,15 +235,13 @@ class SegmentUpdater:
                 "clients_count": len(matched_client_ids)
             }
         except Exception as e:
-            # Логируем ошибку и пробрасываем дальше
-            logger = logging.getLogger(__name__)
+            # Логируем ошибку и пробрасываем дальше - используем глобальный logger
             logger.error(f"Error updating segment {segment_id}: {e}")
             raise
 
     async def update_client_segments(self, client_id: int):
         """
         Обновляет все сегменты для конкретного клиента
-        Вызывается после изменения данных клиента
         """
         # Получаем все активные сегменты
         query = select(Segment).where(Segment.is_active == True)
