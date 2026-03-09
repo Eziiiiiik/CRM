@@ -4,25 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: ОБновился, поставил новый интерпритатор, обновил редактор, настраивал всё, чтобы работало. Чуть подправил requirements.txt.">
+    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно.">
+      <change afterPath="$PROJECT_DIR$/app/ai/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/client_assistant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/dependencies.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/prompts.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/routers/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/routers/chat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/routers/meetings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/ai/routers/notifications.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/register.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/users_db.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/endpoints/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/dashboard.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/deals.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/deals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/interactions.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/interactions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/notifications.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/segments.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/segments.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/database.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/notifications.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/core/segment_engine.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/segment_engine.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/deal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/interaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/interaction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/client.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/client.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/deal.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/deal.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,23 +69,28 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.run.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/PycharmProjects/CRM&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.dashboard.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.run.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/admin/PycharmProjects/CRM/frontend/static/css",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\PycharmProjects\CRM\frontend\static\css" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\PycharmProjects\CRM\app\ai\routers" />
       <recent name="C:\Users\admin\PycharmProjects\CRM\app" />
     </key>
   </component>
@@ -214,7 +221,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772778380898</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно.">
+      <option name="closed" value="true" />
+      <created>1772916230634</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1772916230634</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -246,6 +261,7 @@
     <MESSAGE value="Initial commit: Добавил сегментацию клиентов для упрощения работы." />
     <MESSAGE value="Initial commit: Добавил логирование(пока не рабочее)" />
     <MESSAGE value="Initial commit: ОБновился, поставил новый интерпритатор, обновил редактор, настраивал всё, чтобы работало. Чуть подправил requirements.txt." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: ОБновился, поставил новый интерпритатор, обновил редактор, настраивал всё, чтобы работало. Чуть подправил requirements.txt." />
+    <MESSAGE value="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно." />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно." />
   </component>
 </project>

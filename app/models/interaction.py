@@ -16,6 +16,7 @@ class InteractionType(str, enum.Enum):
     SOCIAL = "social"
     TASK = "task"
     NOTE = "note"
+    CHAT = "chat"
     OTHER = "other"
 
 

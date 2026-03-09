@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildCRM</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">Build</span> CRM
+            </div>
+            <div class="nav-links">
+                <a href="/" class="active">Главная</a>
+                <a href="#analysis">Аналитика</a>
+                <a href="#services">Услуги</a>
+                <a href="#contact">Контакты</a>
+            </div>
+            <div>
+                <button class="btn-glow" onclick="openLoginModal()">ВОЙТИ</button>
+                <a href="/register" class="btn-primary" style="margin-left: 10px;">РЕГИСТРАЦИЯ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero секция -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    <span>Build CRM</span>
+                    <span class="pink">Автоматизация </span>
+                    <span>Вашего бизнеса</span>
+                </h1>
+                <p>Получайте самую лучшую автоматизацию вашего бизнеса прям с коробки</p>
+                <div>
+                    <a href="/register" class="btn-primary">НАЧАТЬ РАБОТАТЬ С НАМИ</a>
+                    <button class="btn-outline" onclick="scrollToSection('analysis')">УЗНАТЬ БОЛЬШЕ</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Метрики с реальными данными из вашего бэкенда -->
+    <section class="metrics">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item">
+                    <div class="metric-value" id="total-clients">0</div>
+                    <div class="metric-label">ВСЕГО КЛИЕНТОВ</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="total-deals">0</div>
+                    <div class="metric-label">АКТИВНЫХ СДЕЛОК</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="total-amount">0 ₽</div>
+                    <div class="metric-label">ОБЪЁМ ТОРГОВ</div>
+                </div>
+                <div class="metric-item">
+                    <div class="metric-value" id="conversion">0%</div>
+                    <div class="metric-label">КОНВЕРСИЯ</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Аналитика -->
+    <section id="analysis" class="analysis">
+        <div class="container">
+            <h2 class="section-title">АНАЛИТИКА <span class="pink">РЫНКА</span></h2>
+            <p class="section-subtitle">Актуальные данные и прогнозы для принятия правильных решений</p>
+
+            <div class="analysis-grid">
+                <div class="analysis-card">
+                    <div class="percentage" id="bitcoin-percent">+0%</div>
+                    <div class="analysis-label">Bitcoin (BTC)</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="bitcoin-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="analysis-card">
+                    <div class="percentage" id="ethereum-percent">+0%</div>
+                    <div class="analysis-label">Ethereum (ETH)</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="ethereum-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="analysis-card highlight">
+                    <div class="percentage" id="total-growth">+0%</div>
+                    <div class="analysis-label">РОСТ ПОРТФЕЛЯ</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="growth-progress" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">НАШИ <span class="pink">УСЛУГИ</span></h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <span class="service-icon">📊</span>
+                    <h3>АНАЛИТИКА</h3>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">📈</span>
+                    <h3>ТРЕЙДИНГ</h3>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🔒</span>
+                    <h3>БЕЗОПАСНОСТЬ</h3>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">💱</span>
+                    <h3>ОБМЕН</h3>
+                </div>
+                <div class="service-card">
+                    <span class="service-icon">🎓</span>
+                    <h3>ОБУЧЕНИЕ</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>© 2024 Крипто Хаб. Все права защищены.</div>
+                <div class="footer-links">
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Условия использования</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 class="modal-title">ВХОД В <span class="pink">СИСТЕМУ</span></h2>
+
+            <form class="auth-form" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-email">EMAIL</label>
+                    <input type="email" id="login-email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">ПАРОЛЬ</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <div id="login-error" class="error-message" style="display: none;"></div>
+                <button type="submit" class="btn-primary">ВОЙТИ</button>
+            </form>
+
+            <p class="modal-footer">
+                Нет аккаунта? <a href="/register" class="pink">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Баннер успешной регистрации -->
+    <div id="successBanner" class="success-banner" style="display: none;">✅ Регистрация успешна!</div>
+
+    <script>
+        // Модальное окно
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        // Закрытие по клику вне модалки
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                closeLoginModal();
+            }
+        }
+
+        // Обработка входа
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const errorDiv = document.getElementById('login-error');
+
+            try {
+                // TODO: Здесь будет реальный запрос к API
+                console.log('Login:', { email, password });
+
+                // Пример реального запроса:
+                /*
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/profile';
+                } else {
+                    const error = await response.json();
+                    errorDiv.textContent = error.detail || 'Ошибка входа';
+                    errorDiv.style.display = 'block';
+                }
+                */
+
+                // Временное решение
+                alert('Демо-режим: вход в систему');
+                closeLoginModal();
+
+            } catch (error) {
+                errorDiv.textContent = 'Ошибка соединения с сервером';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Загрузка данных с бэкенда
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/api/v1/dashboard/kpi');
+                const data = await response.json();
+
+                if (data) {
+                    // Обновляем метрики
+                    document.getElementById('total-clients').textContent = data.clients?.total || 0;
+                    document.getElementById('total-deals').textContent = data.deals?.active || 0;
+                    document.getElementById('total-amount').textContent =
+                        (data.financial?.total_amount || 0).toLocaleString() + ' ₽';
+                    document.getElementById('conversion').textContent =
+                        (data.deals?.conversion_rate || 0) + '%';
+
+                    // Обновляем аналитику (пример)
+                    const total = data.clients?.total || 1;
+                    const growth = data.clients?.growth || 0;
+
+                    document.getElementById('total-growth').textContent = '+' + growth + '%';
+                    document.getElementById('growth-progress').style.width = growth + '%';
+
+                    // Имитация данных для криптовалют (позже можно заменить на реальные)
+                    document.getElementById('bitcoin-progress').style.width = '65%';
+                    document.getElementById('ethereum-progress').style.width = '42%';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+            }
+        }
+
+        // Показываем баннер если регистрация успешна
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('registered') === 'true') {
+            const banner = document.getElementById('successBanner');
+            banner.style.display = 'block';
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 3000);
+        }
+
+        // Загружаем данные при загрузке страницы
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+
+        // Плавный скролл
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    </script>
+</body>
+</html>

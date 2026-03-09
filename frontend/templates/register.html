@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Крипто Хаб</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">КРИПТО</span> ХАБ
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/#analysis">Аналитика</a>
+                <a href="/#services">Услуги</a>
+            </div>
+            <div>
+                <button class="btn-glow" onclick="openLoginModal()">ВОЙТИ</button>
+                <a href="/register" class="btn-primary" style="margin-left: 10px;">РЕГИСТРАЦИЯ</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Секция регистрации -->
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <!-- Форма регистрации -->
+                <div class="auth-card">
+                    <h2 class="auth-title">
+                        СОЗДАТЬ<br>
+                        <span class="pink">АККАУНТ</span>
+                    </h2>
+
+                    {% if error %}
+                        <div class="error-banner">{{ error }}</div>
+                    {% endif %}
+
+                    <form class="auth-form" action="/register" method="POST">
+                        <div class="form-group">
+                            <label for="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</label>
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="crypto_master"
+                                required
+                                minlength="3"
+                                value="{{ username or '' }}"
+                            >
+                            <div class="input-hint">От 3 до 20 символов</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">EMAIL</label>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="your@email.com"
+                                required
+                                value="{{ email or '' }}"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">ПАРОЛЬ</label>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="••••••••"
+                                required
+                                minlength="6"
+                            >
+                            <div class="input-hint">Минимум 6 символов</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirm_password">ПОДТВЕРЖДЕНИЕ ПАРОЛЯ</label>
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                placeholder="••••••••"
+                                required
+                                oninput="checkPasswords()"
+                            >
+                            <div id="password-error" class="error-message"></div>
+                        </div>
+
+                        <div class="form-checkbox">
+                            <input type="checkbox" id="terms" required>
+                            <label for="terms">
+                                Я принимаю <a href="#">условия использования</a>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="submit-btn">
+                            ЗАРЕГИСТРИРОВАТЬСЯ
+                        </button>
+                    </form>
+
+                    <p class="modal-footer" style="margin-top: 20px;">
+                        Уже есть аккаунт?
+                        <a href="#" class="pink" onclick="openLoginModal(); return false;">Войти</a>
+                    </p>
+                </div>
+
+                <!-- Блок преимуществ -->
+                <div class="auth-benefits">
+                    <h2 class="benefits-title">
+                        ПОЧЕМУ<br>
+                        <span class="pink">КРИПТО ХАБ?</span>
+                    </h2>
+
+                    <ul class="benefits-list">
+                        <li>🔹 Мгновенный доступ к аналитике</li>
+                        <li>🔹 Персональные торговые сигналы</li>
+                        <li>🔹 Профессиональные инструменты</li>
+                        <li>🔹 Круглосуточная поддержка</li>
+                        <li>🔹 Защита активов</li>
+                    </ul>
+
+                    <div class="benefits-stats">
+                        <div class="benefit-stat">
+                            <div class="stat-number" id="total-users">0</div>
+                            <div class="stat-label">ПОЛЬЗОВАТЕЛЕЙ</div>
+                        </div>
+                        <div class="benefit-stat">
+                            <div class="stat-number" id="total-volume">0₽</div>
+                            <div class="stat-label">ОБЪЁМ ТОРГОВ</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Модальное окно входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 class="modal-title">ВХОД В <span class="pink">СИСТЕМУ</span></h2>
+
+            <form class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>EMAIL</label>
+                    <input type="email" id="login-email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>ПАРОЛЬ</label>
+                    <input type="password" id="login-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary">ВОЙТИ</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Проверка паролей
+        function checkPasswords() {
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm_password').value;
+            const errorDiv = document.getElementById('password-error');
+            const submitBtn = document.getElementById('submit-btn');
+
+            if (confirm && password !== confirm) {
+                errorDiv.textContent = '❌ Пароли не совпадают';
+                errorDiv.style.display = 'block';
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+            } else {
+                errorDiv.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+            }
+        }
+
+        // Модальное окно
+        function openLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('loginModal');
+            if (event.target == modal) {
+                closeLoginModal();
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            alert('Демо-режим: вход в систему');
+            closeLoginModal();
+        }
+
+        // Загрузка статистики
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/v1/dashboard/kpi');
+                const data = await response.json();
+
+                if (data) {
+                    document.getElementById('total-users').textContent = data.clients?.total || 0;
+                    document.getElementById('total-volume').textContent =
+                        (data.financial?.total_amount || 0).toLocaleString() + '₽';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadStats);
+    </script>
+</body>
+</html>
