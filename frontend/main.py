@@ -36,7 +36,7 @@ async def register_page(request: Request):
 @app.get("/chat", response_class=HTMLResponse)
 async def chat(request: Request):
     return templates.TemplateResponse(
-        "support-chat.html",
+        "support_chat.html",
         {"request": request}
     )
 
