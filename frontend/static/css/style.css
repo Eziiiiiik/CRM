@@ -808,3 +808,55 @@ body {
         justify-content: center;
     }
 }
+
+/* ========== КНОПКА ЧАТЫ - ПРИНУДИТЕЛЬНЫЕ СТИЛИ ========== */
+.nav-buttons .chat-nav-button {
+    /* Форма и размеры */
+    padding: 10px 25px !important;
+    border-radius: 4px !important;
+
+    /* Розовая обводка */
+    border: 2px solid #ff00ff !important;  /* Явно указываем цвет */
+    background: transparent !important;      /* Прозрачный фон */
+
+    /* Белый текст */
+    color: white !important;  /* Явно белый цвет */
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    text-decoration: none !important;
+    text-transform: uppercase !important;
+
+    /* Отображение */
+    display: inline-block !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    line-height: 1 !important;
+    margin-left: 10px !important;
+
+    /* Убираем возможные конфликты */
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+/* При наведении */
+.nav-buttons .chat-nav-button:hover {
+    background: #ff00ff !important;  /* Розовый фон */
+    color: black !important;          /* Черный текст */
+    transform: translateY(-2px) !important;
+    box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff !important;
+}
+
+/* При нажатии */
+.nav-buttons .chat-nav-button:active {
+    transform: translateY(0) !important;
+}
+
+/* Для мобильных */
+@media (max-width: 768px) {
+    .nav-buttons .chat-nav-button {
+        padding: 8px 16px !important;
+        font-size: 12px !important;
+        margin-left: 5px !important;
+    }
+}
