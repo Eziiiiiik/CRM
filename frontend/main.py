@@ -32,6 +32,13 @@ async def register_page(request: Request):
         {"request": request}
     )
 
+#страница чата
+@app.get("/chat", response_class=HTMLResponse)
+async def chat(request: Request):
+    return templates.TemplateResponse(
+        "chat.html",
+        {"request": request}
+    )
 
 @router.post("/register")
 async def register_user(
