@@ -91,7 +91,7 @@ async def get_available_slots(
         slot_time = datetime.combine(target_date, datetime.min.time().replace(hour=hour))
         slots.append({
             "time": slot_time.strftime("%H:%M"),
-            "available": True  # TODO: проверить с существующими встречами
+            "available": True
         })
 
     return {"date": date, "slots": slots}

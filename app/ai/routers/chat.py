@@ -91,11 +91,5 @@ async def send_feedback(
         rating: int = 5,
         comment: Optional[str] = None
 ):
-    """
-    Отправить обратную связь о качестве ответов
-    """
-    # TODO: реализовать сохранение обратной связи
-    # Здесь можно сохранять в отдельную таблицу feedback
-    # или в Redis
 
     return {"status": "ok", "message": "Спасибо за обратную связь!"}

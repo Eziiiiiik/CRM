@@ -4,26 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно.">
-      <change afterPath="$PROJECT_DIR$/app/ai/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/client_assistant.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/dependencies.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/prompts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/routers/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/routers/chat.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/routers/meetings.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/ai/routers/notifications.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/static/css/style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/register.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/users_db.py" afterDir="false" />
+    <list default="true" id="edfc2fa6-c94f-4469-b1d4-4032e25ae9bb" name="Changes" comment="Initial commit: Настроил нормально dashboard, сделал ai assistant. Фронт сделал друг который второй контрибьютор. С фронтом я не могу работать увы">
+      <change afterPath="$PROJECT_DIR$/app/ai/support_assistant.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/api/endpoints/chat_support.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/websocket/support_chat.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/support_chat.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/dashboard.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/ai/routers/chat.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/ai/routers/chat.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/ai/routers/meetings.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/ai/routers/meetings.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/interaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/interaction.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,22 +58,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.dashboard.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.run.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/admin/PycharmProjects/CRM/frontend/static/css",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.meetings.executor&quot;: &quot;Run&quot;,
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/PycharmProjects/CRM/frontend/static/css&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\admin\PycharmProjects\CRM\frontend\static\css" />
@@ -229,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772916230634</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Initial commit: Настроил нормально dashboard, сделал ai assistant. Фронт сделал друг который второй контрибьютор. С фронтом я не могу работать увы">
+      <option name="closed" value="true" />
+      <created>1773084066193</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1773084066193</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -262,6 +260,7 @@
     <MESSAGE value="Initial commit: Добавил логирование(пока не рабочее)" />
     <MESSAGE value="Initial commit: ОБновился, поставил новый интерпритатор, обновил редактор, настраивал всё, чтобы работало. Чуть подправил requirements.txt." />
     <MESSAGE value="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно." />
-    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Отрефакторил весь говнокод, теперь всё выглядит прекрасно." />
+    <MESSAGE value="Initial commit: Настроил нормально dashboard, сделал ai assistant. Фронт сделал друг который второй контрибьютор. С фронтом я не могу работать увы" />
+    <option name="LAST_COMMIT_MESSAGE" value="Initial commit: Настроил нормально dashboard, сделал ai assistant. Фронт сделал друг который второй контрибьютор. С фронтом я не могу работать увы" />
   </component>
 </project>
