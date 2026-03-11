@@ -9,8 +9,8 @@
     --black: #000000;
     --dark: #0a0a0a;
     --pink: #ff00ff;
-    --pink-glow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
-    --pink-glow-strong: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff;
+    --pink-glow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;  /* Меньше размытие */
+--pink-glow-strong: 0 0 10px #ff00ff, 0 0 20px #ff00ff;  /* Без сильного свечения */
     --text: #ffffff;
     --text-dim: #cccccc;
 }
@@ -109,27 +109,7 @@ body {
     overflow: hidden;
 }
 
-.hero::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: repeating-linear-gradient(
-        45deg,
-        transparent 0px,
-        transparent 10px,
-        rgba(255, 0, 255, 0.03) 10px,
-        rgba(255, 0, 255, 0.03) 20px
-    );
-    animation: moveBg 20s linear infinite;
-}
-
-@keyframes moveBg {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
+/* ДВИЖУЩИЕСЯ ЛИНИИ УДАЛЕНЫ */
 
 .hero-content {
     position: relative;
