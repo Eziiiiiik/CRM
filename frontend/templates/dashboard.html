@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистика - Аналитика CRM</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">CRM Статистика</span>
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="#news">Новости</a>
+                <a href="/dashboard" class="active">Статистика</a>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-glow" onclick="openLoginModal()">ВОЙТИ</button>
+                <a href="/register" class="btn-primary">РЕГИСТРАЦИЯ</a>
+                <a href="/chat" class="chat-nav-button">ЧАТЫ</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="period-filter">
+                <button class="period-btn" data-period="day">День</button>
+                <button class="period-btn" data-period="week">Неделя</button>
+                <button class="period-btn active" data-period="month">Месяц</button>
+                <button class="period-btn" data-period="year">Год</button>
+            </div>
+
+            <div id="dashboard-content">
+                <div class="loader">Загрузка данных...</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">© 2024 CRM Система</div>
+                <div class="footer-links">
+                    <a href="#">О нас</a>
+                    <a href="#">Политика конфиденциальности</a>
+                    <a href="#">Контакты</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentPeriod = 'month';
+
+        async function loadDashboard(period) {
+            const container = document.getElementById('dashboard-content');
+            container.innerHTML = '<div class="loader">Загрузка данных...</div>';
+
+            try {
+                const response = await fetch(`/api/v1/dashboard/?period=${period}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    renderDashboard(data.data);
+                } else {
+                    container.innerHTML = '<div class="error-banner">Ошибка загрузки данных</div>';
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                container.innerHTML = '<div class="error-banner">Ошибка подключения к серверу</div>';
+            }
+        }
+
+        function renderDashboard(data) {
+            const kpi = data.kpi;
+
+            const html = `
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">👥</div>
+                        <div class="kpi-value">${kpi.clients.total}</div>
+                        <div class="kpi-label">Всего клиентов</div>
+                        <div class="kpi-trend">+${kpi.clients.new} новых</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">💼</div>
+                        <div class="kpi-value">${kpi.deals.active}</div>
+                        <div class="kpi-label">Активные сделки</div>
+                        <div class="kpi-trend">Всего: ${kpi.deals.total}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">💰</div>
+                        <div class="kpi-value">${formatMoney(kpi.financial.total_amount)}</div>
+                        <div class="kpi-label">Общая сумма</div>
+                        <div class="kpi-trend">Средняя: ${formatMoney(kpi.financial.average_deal)}</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📈</div>
+                        <div class="kpi-value">${kpi.deals.conversion_rate}%</div>
+                        <div class="kpi-label">Конверсия</div>
+                        <div class="kpi-trend">Выиграно: ${kpi.deals.won}</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-two-columns">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">📋 Последняя активность</h3>
+                        <div class="activity-list">
+                            ${renderActivity(data.recent_activity)}
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="card-title">📅 Предстоящие события</h3>
+                        <div class="events-list">
+                            ${renderEvents(data.upcoming_events)}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-two-columns">
+                    <div class="dashboard-card">
+                        <h3 class="card-title">🏆 Топ клиенты</h3>
+                        <div class="top-clients-list">
+                            ${renderTopClients(data.top_clients)}
+                        </div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3 class="card-title">⚠️ Уведомления</h3>
+                        <div class="alerts-list">
+                            ${renderAlerts(data.alerts)}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('dashboard-content').innerHTML = html;
+        }
+
+        function renderActivity(activities) {
+            if (!activities || activities.length === 0) {
+                return '<div class="activity-item">Нет активности</div>';
+            }
+
+            return activities.map(activity => `
+                <div class="activity-item">
+                    <div class="activity-icon">${activity.icon || '📌'}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${escapeHtml(activity.title)}</div>
+                        <div class="activity-description">${escapeHtml(activity.description)}</div>
+                        <div class="activity-time">${formatDate(activity.timestamp)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderEvents(events) {
+            if (!events || events.length === 0) {
+                return '<div class="event-item">Нет предстоящих событий</div>';
+            }
+
+            return events.map(event => `
+                <div class="event-item ${event.priority === 'high' ? 'event-priority-high' : event.priority === 'medium' ? 'event-priority-medium' : ''}">
+                    <div class="activity-icon">${event.type === 'meeting' ? '🤝' : event.type === 'birthday' ? '🎂' : '⏰'}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${escapeHtml(event.title)}</div>
+                        <div class="activity-description">${escapeHtml(event.description)}</div>
+                        <div class="event-date">${formatDate(event.datetime)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderTopClients(clients) {
+            if (!clients || clients.length === 0) {
+                return '<div class="client-item">Нет данных</div>';
+            }
+
+            return clients.map(client => `
+                <div class="client-item">
+                    <div>
+                        <div class="client-name">${escapeHtml(client.name)}</div>
+                        <div class="client-company">${escapeHtml(client.company || 'Без компании')}</div>
+                    </div>
+                    <div class="client-amount">${formatMoney(client.total_amount)}</div>
+                </div>
+            `).join('');
+        }
+
+        function renderAlerts(alerts) {
+            if (!alerts || alerts.length === 0) {
+                return '<div class="alert-item">Нет уведомлений</div>';
+            }
+
+            return alerts.map(alert => `
+                <div class="alert-item">
+                    <div class="alert-icon">${alert.icon || '⚠️'}</div>
+                    <div class="activity-content">
+                        <div class="activity-title">${escapeHtml(alert.title)}</div>
+                        <div class="activity-description">${escapeHtml(alert.message)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function formatMoney(amount) {
+            if (!amount) return '0 ₽';
+            return new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Дата неизвестна';
+            const date = new Date(dateString);
+            return date.toLocaleString('ru-RU', {
+                day: '2-digit',
+                month: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Обработчики периода
+        document.querySelectorAll('.period-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentPeriod = btn.dataset.period;
+                loadDashboard(currentPeriod);
+            });
+        });
+
+        // Загрузка при старте
+        loadDashboard('month');
+    </script>
+</body>
+</html>
