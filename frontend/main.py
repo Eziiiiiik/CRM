@@ -40,6 +40,14 @@ async def chat(request: Request):
         {"request": request}
     )
 
+#страница статистики
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    return templates.TemplateResponse(
+        "dashboard.html",
+        {"request": request}
+    )
+
 @router.post("/register")
 async def register_user(
         request: Request,
