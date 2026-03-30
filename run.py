@@ -1,5 +1,4 @@
 import uvicorn
-from frontend.main import router as frontend_router
 
 if __name__ == "__main__":
     print("=" * 50)

@@ -1,15 +1,10 @@
 from fastapi import APIRouter, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import logging
 from typing import Dict, Any
 
 router = APIRouter(prefix="", tags=["frontend"])
-
-BASE_DIR = Path(__file__).parent
-TEMPLATES_DIR = BASE_DIR / "templates"
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 users_db: Dict[int, Dict[str, Any]] = {}
 next_id = 1
@@ -17,36 +12,31 @@ next_id = 1
 logger = logging.getLogger(__name__)
 
 
+# Читаем HTML файлы напрямую
+def read_html(filename: str) -> str:
+    path = Path(__file__).parent / "templates" / filename
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request}
-    )
+    registered = request.query_params.get("registered")
+    username = request.query_params.get("username", "")
+
+    html = read_html("index.html")
+
+    if registered == "true":
+        success = f'<div style="color: green; padding: 10px;">✅ Регистрация успешна, {username}!</div>'
+        html = html.replace("<!-- REGISTER_SUCCESS -->", success)
+
+    return HTMLResponse(content=html)
 
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
-    return templates.TemplateResponse(
-        "register.html",
-        {"request": request}
-    )
+    return HTMLResponse(content=read_html("register.html"))
 
-#страница чата
-@app.get("/chat", response_class=HTMLResponse)
-async def chat(request: Request):
-    return templates.TemplateResponse(
-        "support_chat.html",
-        {"request": request}
-    )
-
-#страница статистики
-@app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    return templates.TemplateResponse(
-        "dashboard.html",
-        {"request": request}
-    )
 
 @router.post("/register")
 async def register_user(
@@ -57,45 +47,40 @@ async def register_user(
 ):
     global next_id
 
-    try:
-        for user in users_db.values():
-            if user["email"] == email:
-                return templates.TemplateResponse(
-                    "register.html",
-                    {
-                        "request": request,
-                        "error": "Пользователь с таким email уже существует",
-                        "username": username,
-                        "email": email
-                    }
-                )
+    for user in users_db.values():
+        if user["email"] == email:
+            html = read_html("register.html")
+            error = '<div style="color: red;">❌ Пользователь с таким email уже существует</div>'
+            html = html.replace("<!-- ERROR -->", error)
+            return HTMLResponse(content=html, status_code=400)
 
-        user_id = next_id
-        next_id += 1
+    user_id = next_id
+    next_id += 1
 
-        users_db[user_id] = {
-            "id": user_id,
-            "username": username,
-            "email": email,
-            "password": password
-        }
+    users_db[user_id] = {
+        "id": user_id,
+        "username": username,
+        "email": email,
+        "password": password
+    }
 
-        logger.info(f"✅ Новый пользователь: {username} ({email})")
+    logger.info(f"✅ Новый пользователь: {username} ({email})")
 
-        return RedirectResponse(
-            url="/?registered=true",
-            status_code=303
-        )
+    return RedirectResponse(
+        url=f"/?registered=true&username={username}",
+        status_code=303
+    )
 
-    except Exception as e:
-        logger.error(f"❌ Ошибка регистрации: {e}")
-        return templates.TemplateResponse(
-            "register.html",
-            {
-                "request": request,
-                "error": "Произошла ошибка при регистрации"
-            }
-        )
+
+@router.get("/profile", response_class=HTMLResponse)
+async def profile(request: Request):
+    html = read_html("profile.html")
+    return HTMLResponse(content=html)
+
+
+@router.get("/chat", response_class=HTMLResponse)
+async def chat_page(request: Request):
+    return HTMLResponse(content=read_html("chat.html"))
 
 
 @router.get("/api/users")

@@ -7,8 +7,6 @@ import logging
 
 
 from frontend.main import router as frontend_router
-from app.api.endpoints.chat_support import router as support_router
-from frontend.main import templates
 from pathlib import Path
 from fastapi.staticfiles import StaticFiles
 
