@@ -1,0 +1,27 @@
+services:
+  fastapi:
+    build: .
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./crm.db:/app/crm.db
+      - ./.env:/app/.env
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./crm.db
+    restart: unless-stopped
+
+  gateway:
+    build: ./gateway
+    ports:
+      - "5900:5900"
+    environment:
+      - DOCKER_ENV=true
+    depends_on:
+      - fastapi
+    restart: unless-stopped
+
+  chat-server:
+    build: ./chat-server
+    ports:
+      - "3000:3000"
+    restart: unless-stopped

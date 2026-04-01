@@ -21,6 +21,7 @@ def read_html(filename: str) -> str:
 
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
+    """Главная страница"""
     registered = request.query_params.get("registered")
     username = request.query_params.get("username", "")
 
@@ -35,6 +36,7 @@ async def home(request: Request):
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
+    """Страница регистрации"""
     return HTMLResponse(content=read_html("register.html"))
 
 
@@ -45,6 +47,7 @@ async def register_user(
         email: str = Form(...),
         password: str = Form(...)
 ):
+    """Обработка регистрации"""
     global next_id
 
     for user in users_db.values():
@@ -72,19 +75,41 @@ async def register_user(
     )
 
 
+@router.get("/login", response_class=HTMLResponse)
+async def login_page(request: Request):
+    """Страница входа"""
+    return HTMLResponse(content=read_html("login.html"))
+
+
 @router.get("/profile", response_class=HTMLResponse)
 async def profile(request: Request):
+    """Личный кабинет пользователя"""
     html = read_html("profile.html")
     return HTMLResponse(content=html)
 
 
+@router.get("/deals/{deal_id}", response_class=HTMLResponse)
+async def deal_detail(request: Request, deal_id: int):
+    """Страница деталей сделки"""
+    html = read_html("deal_detail.html")
+    return HTMLResponse(content=html)
+
+
+@router.get("/meeting", response_class=HTMLResponse)
+async def meeting_page(request: Request):
+    """Страница записи на встречу"""
+    return HTMLResponse(content=read_html("meeting.html"))
+
+
 @router.get("/chat", response_class=HTMLResponse)
 async def chat_page(request: Request):
+    """Страница чата поддержки"""
     return HTMLResponse(content=read_html("chat.html"))
 
 
 @router.get("/api/users")
 async def get_users():
+    """API: список пользователей (для отладки)"""
     return {
         "total": len(users_db),
         "users": [
