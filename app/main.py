@@ -88,6 +88,7 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 # Подключаем роутер фронтенда (В ПЕРВУЮ ОЧЕРЕДЬ)
 app.include_router(frontend_router)
 
+
 # Подключаем API роутеры
 app.include_router(clients.router, prefix="/api/v1")
 app.include_router(deals.router, prefix="/api/v1")

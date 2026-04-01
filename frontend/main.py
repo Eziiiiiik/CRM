@@ -34,6 +34,12 @@ async def home(request: Request):
     return HTMLResponse(content=html)
 
 
+@router.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_page(request: Request):
+    """Страница статистики"""
+    return HTMLResponse(content=read_html("dashboard.html"))
+
+
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
     """Страница регистрации"""

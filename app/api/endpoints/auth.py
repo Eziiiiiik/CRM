@@ -12,7 +12,6 @@ from app.schemas.user import UserCreate, UserResponse, Token
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-# Секретный ключ для JWT (в .env)
 SECRET_KEY = os.getenv("SECRET_KEY", "7uhoa4kr3arY0L_41TjgQTQQnRkHQq3B93TfBgmqE4I")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 часа

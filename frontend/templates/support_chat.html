@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Крипто Хаб</title>
+    <title>Чат поддержки - Крипто Хаб</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <style>
         /* ===== ПЛАВАЮЩАЯ КНОПКА ЧАТА ===== */
@@ -51,15 +51,9 @@
         }
 
         @keyframes pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255, 0, 255, 0.7);
-            }
-            70% {
-                box-shadow: 0 0 0 20px rgba(255, 0, 255, 0);
-            }
-            100% {
-                box-shadow: 0 0 0 0 rgba(255, 0, 255, 0);
-            }
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 255, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 0, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 255, 0); }
         }
 
         @keyframes blink {
@@ -274,14 +268,8 @@
         }
 
         @keyframes typingBounce {
-            0%, 60%, 100% {
-                transform: translateY(0);
-                opacity: 0.6;
-            }
-            30% {
-                transform: translateY(-10px);
-                opacity: 1;
-            }
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.6; }
+            30% { transform: translateY(-10px); opacity: 1; }
         }
 
         /* Нижняя панель */
@@ -384,322 +372,223 @@
     </style>
 </head>
 <body>
-    <!-- Основной контент страницы (ваш существующий контент) -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <span class="pink">КРИПТО</span> ХАБ
-            </div>
-            <div class="nav-links">
-                <a href="/">Главная</a>
-                <a href="/">Аналитика</a>
-                <a href="/">Услуги</a>
-            </div>
-        </div>
-    </nav>
+<!-- Кнопка чата -->
+<button class="chat-button" id="chatButton" onclick="toggleChat()">
+    💬
+    <span class="notification-badge" id="notificationBadge" style="display: none;">1</span>
+</button>
 
-    <div class="container">
-        <h1>Добро пожаловать в Крипто Хаб</h1>
-        <p>Ваш надежный партнер в мире криптовалют</p>
+<!-- Окно чата -->
+<div class="chat-window" id="chatWindow">
+    <div class="chat-header" id="chatHeader">
+        <h3>ЧАТ ПОДДЕРЖКИ</h3>
+        <div class="status" id="chatStatus">
+            <span class="status-dot" id="statusDot"></span>
+            <span id="statusText">AI Ассистент</span>
+        </div>
+        <button class="chat-close" onclick="toggleChat()">×</button>
     </div>
 
-    <!-- Кнопка чата -->
-    <button class="chat-button" id="chatButton" onclick="toggleChat()">
-        💬
-        <span class="notification-badge" id="notificationBadge" style="display: none;">1</span>
-    </button>
-
-    <!-- Окно чата -->
-    <div class="chat-window" id="chatWindow">
-        <div class="chat-header" id="chatHeader">
-            <h3>ЧАТ ПОДДЕРЖКИ</h3>
-            <div class="status" id="chatStatus">
-                <span class="status-dot" id="statusDot"></span>
-                <span id="statusText">AI Ассистент</span>
-            </div>
-            <button class="chat-close" onclick="toggleChat()">×</button>
+    <div class="chat-messages" id="chatMessages">
+        <div class="welcome-message">
+            <span class="pink">💬</span>
+            Здравствуйте! Я AI-ассистент.<br>
+            <small>Чем могу помочь?</small>
         </div>
+    </div>
 
-        <div class="chat-messages" id="chatMessages">
-            <div class="welcome-message">
-                <span class="pink">💬</span>
-                Здравствуйте! Я AI-ассистент.<br>
-                <small>Чем могу помочь?</small>
-            </div>
-        </div>
-
-        <div class="chat-footer">
-            <div class="input-wrapper">
-                <input
+    <div class="chat-footer">
+        <div class="input-wrapper">
+            <input
                     type="text"
                     class="chat-input"
                     id="chatInput"
                     placeholder="Введите сообщение..."
                     onkeypress="if(event.key === 'Enter') sendMessage()"
-                >
-                <button class="send-button" onclick="sendMessage()" id="sendButton">
-                    ➔
-                </button>
-            </div>
-            <div class="quick-replies" id="quickReplies">
-                <button class="quick-reply-btn" onclick="sendQuickMessage('Статус заказа')">📦 Статус</button>
-                <button class="quick-reply-btn" onclick="sendQuickMessage('Пополнение')">💰 Пополнение</button>
-                <button class="quick-reply-btn" onclick="sendQuickMessage('Вывод')">💸 Вывод</button>
-                <button class="quick-reply-btn" onclick="sendQuickMessage('Оператор')">👤 Оператор</button>
-            </div>
+            >
+            <button class="send-button" onclick="sendMessage()" id="sendButton">
+                ➔
+            </button>
+        </div>
+        <div class="quick-replies" id="quickReplies">
+            <button class="quick-reply-btn" onclick="sendQuickMessage('Статус заказа')">📦 Статус</button>
+            <button class="quick-reply-btn" onclick="sendQuickMessage('Пополнение')">💰 Пополнение</button>
+            <button class="quick-reply-btn" onclick="sendQuickMessage('Вывод')">💸 Вывод</button>
+            <button class="quick-reply-btn" onclick="sendQuickMessage('Оператор')">👤 Оператор</button>
         </div>
     </div>
+</div>
 
-    <script>
-        let ws = null;
-        let sessionId = null;
-        let isConnected = false;
-        let reconnectAttempts = 0;
-        const maxReconnectAttempts = 5;
-        const clientId = localStorage.getItem('userId') || null;
+<script>
+    let ws = null;
+    let isConnected = false;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    const clientId = localStorage.getItem('userId') || null;
 
-        // Переключение чата
-        function toggleChat() {
-            const chatWindow = document.getElementById('chatWindow');
-            const chatButton = document.getElementById('chatButton');
+    function toggleChat() {
+        const chatWindow = document.getElementById('chatWindow');
+        chatWindow.classList.toggle('open');
 
-            chatWindow.classList.toggle('open');
-
-            if (chatWindow.classList.contains('open') && !ws) {
-                connectWebSocket();
-            }
+        if (chatWindow.classList.contains('open') && (!ws || ws.readyState !== WebSocket.OPEN)) {
+            connectWebSocket();
         }
+    }
 
-        // Подключение к WebSocket
-        function connectWebSocket() {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${protocol}//${window.location.host}/api/v1/support/client${clientId ? '?client_id=' + clientId : ''}`;
+    function connectWebSocket() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const wsUrl = `${protocol}//${window.location.hostname}:3000`;
 
-            try {
-                ws = new WebSocket(wsUrl);
+        try {
+            ws = new WebSocket(wsUrl);
 
-                ws.onopen = function() {
-                    console.log('✅ Подключено к чату');
-                    isConnected = true;
-                    reconnectAttempts = 0;
-                    updateStatus('connected');
-                    addSystemMessage('Соединение установлено. Чем могу помочь?');
-                };
+            ws.onopen = function() {
+                console.log('✅ WebSocket подключен');
+                isConnected = true;
+                reconnectAttempts = 0;
+                updateStatus(true);
+                addSystemMessage('Соединение установлено. Чем могу помочь?');
+            };
 
-                ws.onmessage = function(event) {
-                    const data = JSON.parse(event.data);
-                    handleMessage(data);
-                };
+            ws.onmessage = function(event) {
+                console.log('📨 Получено:', event.data);
+                addMessage(event.data, 'ai');
+            };
 
-                ws.onclose = function() {
-                    console.log('❌ Отключено от чата');
-                    isConnected = false;
-                    updateStatus('disconnected');
+            ws.onclose = function() {
+                console.log('❌ WebSocket отключен');
+                isConnected = false;
+                updateStatus(false);
 
-                    if (reconnectAttempts < maxReconnectAttempts) {
-                        reconnectAttempts++;
-                        setTimeout(connectWebSocket, 3000);
-                    }
-                };
-
-                ws.onerror = function(error) {
-                    console.error('WebSocket ошибка:', error);
-                };
-            } catch (error) {
-                console.error('Ошибка:', error);
-            }
-        }
-
-        // Обновление статуса
-        function updateStatus(status) {
-            const statusDot = document.getElementById('statusDot');
-            const statusText = document.getElementById('statusText');
-
-            if (status === 'connected') {
-                statusDot.className = 'status-dot';
-                statusText.textContent = 'AI Ассистент';
-            } else if (status === 'waiting') {
-                statusDot.className = 'status-dot waiting';
-                statusText.textContent = 'Ожидание оператора';
-            } else if (status === 'operator') {
-                statusDot.className = 'status-dot';
-                statusDot.style.background = '#00ff00';
-                statusText.textContent = 'Оператор онлайн';
-            } else {
-                statusDot.className = 'status-dot offline';
-                statusText.textContent = 'Нет соединения';
-            }
-        }
-
-        // Обработка сообщений
-        function handleMessage(data) {
-            console.log('Получено:', data);
-
-            hideTypingIndicator();
-
-            if (data.type === 'transfer_to_human') {
-                updateStatus('waiting');
-                addSystemMessage('🔄 Ищу свободного оператора...');
-            }
-            else if (data.type === 'operator_connected') {
-                updateStatus('operator');
-                addSystemMessage('👤 Оператор подключился');
-            }
-            else if (data.type === 'operator_message') {
-                addMessage(data.message, 'operator');
-            }
-            else if (data.type === 'ai' || data.type === 'answer' || data.type === 'greeting' || data.type === 'status') {
-                addMessage(data.message, 'ai');
-
-                if (data.suggestions && data.suggestions.length > 0) {
-                    updateQuickReplies(data.suggestions);
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    setTimeout(connectWebSocket, 3000);
                 }
-            }
-            else if (data.type === 'unknown' || data.type === 'error') {
-                addMessage(data.message, 'ai');
+            };
 
-                if (data.suggestions && data.suggestions.length > 0) {
-                    updateQuickReplies(data.suggestions);
-                }
-            }
+            ws.onerror = function(error) {
+                console.error('WebSocket ошибка:', error);
+            };
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
+    }
 
-        // Отправка сообщения
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
+    function updateStatus(connected) {
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
 
-            if (!message || !isConnected) return;
-
-            addMessage(message, 'client');
-            ws.send(message);
-            input.value = '';
-            showTypingIndicator();
-            removeWelcome();
+        if (connected) {
+            statusDot.className = 'status-dot';
+            statusText.textContent = 'AI Ассистент';
+        } else {
+            statusDot.className = 'status-dot offline';
+            statusText.textContent = 'Нет соединения';
         }
+    }
 
-        function sendQuickMessage(message) {
-            document.getElementById('chatInput').value = message;
-            sendMessage();
-        }
+    function sendMessage() {
+        const input = document.getElementById('chatInput');
+        const message = input.value.trim();
 
-        function addMessage(text, type) {
-            const messagesDiv = document.getElementById('chatMessages');
-            removeWelcome();
+        if (!message || !isConnected) return;
 
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${type}-message`;
+        addMessage(message, 'client');
+        ws.send(message);
+        input.value = '';
+        removeWelcome();
+    }
 
-            const time = new Date().toLocaleTimeString('ru-RU', {
-                hour: '2-digit',
-                minute: '2-digit'
-            });
+    function sendQuickMessage(message) {
+        document.getElementById('chatInput').value = message;
+        sendMessage();
+    }
 
-            let sender = '';
-            if (type === 'client') sender = '<div class="message-sender">Вы</div>';
-            else if (type === 'ai') sender = '<div class="message-sender">🤖 AI</div>';
-            else if (type === 'operator') sender = '<div class="message-sender">👤 Оператор</div>';
+    function addMessage(text, type) {
+        const messagesDiv = document.getElementById('chatMessages');
+        removeWelcome();
 
-            messageDiv.innerHTML = `
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}-message`;
+
+        const time = new Date().toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let sender = '';
+        if (type === 'client') sender = '<div class="message-sender">Вы</div>';
+        else if (type === 'ai') sender = '<div class="message-sender">🤖 AI Ассистент</div>';
+
+        messageDiv.innerHTML = `
                 ${sender}
-                <div>${text}</div>
+                <div>${escapeHtml(text)}</div>
                 <div class="message-time">${time}</div>
             `;
 
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
 
-        function addSystemMessage(text) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'system-message';
-            messageDiv.textContent = text;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
+    function addSystemMessage(text) {
+        const messagesDiv = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'system-message';
+        messageDiv.textContent = text;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
 
-        function removeWelcome() {
-            const messagesDiv = document.getElementById('chatMessages');
-            const welcome = messagesDiv.querySelector('.welcome-message');
-            if (welcome) welcome.remove();
-        }
+    function removeWelcome() {
+        const messagesDiv = document.getElementById('chatMessages');
+        const welcome = messagesDiv.querySelector('.welcome-message');
+        if (welcome) welcome.remove();
+    }
 
-        function updateQuickReplies(suggestions) {
-            const repliesDiv = document.getElementById('quickReplies');
-            repliesDiv.innerHTML = '';
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-            suggestions.forEach(text => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-reply-btn';
-                btn.textContent = text;
-                btn.onclick = () => sendQuickMessage(text);
-                repliesDiv.appendChild(btn);
-            });
-        }
+    // Перетаскивание окна чата
+    const chatWindow = document.getElementById('chatWindow');
+    const chatHeader = document.getElementById('chatHeader');
+    let isDragging = false;
+    let xOffset = 0, yOffset = 0;
+    let initialX, initialY;
 
-        function showTypingIndicator() {
-            hideTypingIndicator();
+    chatHeader.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
 
-            const messagesDiv = document.getElementById('chatMessages');
-            const indicator = document.createElement('div');
-            indicator.className = 'typing-indicator';
-            indicator.id = 'typingIndicator';
-            indicator.innerHTML = '<span></span><span></span><span></span>';
-            messagesDiv.appendChild(indicator);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            const indicator = document.getElementById('typingIndicator');
-            if (indicator) indicator.remove();
-        }
-
-        // Перетаскивание окна чата
-        const chatWindow = document.getElementById('chatWindow');
-        const chatHeader = document.getElementById('chatHeader');
-        let isDragging = false;
-        let currentX;
-        let currentY;
-        let initialX;
-        let initialY;
-        let xOffset = 0;
-        let yOffset = 0;
-
-        chatHeader.addEventListener('mousedown', dragStart);
-        document.addEventListener('mousemove', drag);
-        document.addEventListener('mouseup', dragEnd);
-
-        function dragStart(e) {
+    function dragStart(e) {
+        if (e.target === chatHeader || chatHeader.contains(e.target)) {
+            isDragging = true;
             initialX = e.clientX - xOffset;
             initialY = e.clientY - yOffset;
-
-            if (e.target === chatHeader || e.target.parentNode === chatHeader) {
-                isDragging = true;
-            }
+            chatWindow.style.transition = 'none';
         }
+    }
 
-        function drag(e) {
-            if (isDragging) {
-                e.preventDefault();
-
-                currentX = e.clientX - initialX;
-                currentY = e.clientY - initialY;
-
-                xOffset = currentX;
-                yOffset = currentY;
-
-                setTranslate(currentX, currentY, chatWindow);
-            }
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            xOffset = e.clientX - initialX;
+            yOffset = e.clientY - initialY;
+            chatWindow.style.transform = `translate3d(${xOffset}px, ${yOffset}px, 0)`;
         }
+    }
 
-        function setTranslate(xPos, yPos, el) {
-            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
-        }
+    function dragEnd() {
+        isDragging = false;
+        chatWindow.style.transition = '';
+    }
 
-        function dragEnd() {
-            isDragging = false;
-        }
-    </script>
+    // Подключаемся при загрузке
+    document.addEventListener('DOMContentLoaded', function() {
+        connectWebSocket();
+    });
+</script>
 </body>
 </html>
