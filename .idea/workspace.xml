@@ -16,16 +16,16 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да">
-      <change afterPath="$PROJECT_DIR$/app/api/endpoints/news.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models/news.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/schemas/news.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/news.html" afterDir="false" />
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Написал новости">
+      <change afterPath="$PROJECT_DIR$/app/api/endpoints/admin.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/admin/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/profile.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/endpoints/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/endpoints/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/schemas/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/user.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/support_chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/support_chat.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +52,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Eziiiiiik/CRM.git&quot;,
-    &quot;accountId&quot;: &quot;409e57b4-6663-42c0-87a8-f0c3903edbd8&quot;
+    &quot;accountId&quot;: &quot;0fb0af70-7028-4619-baca-2c19c3e6fb34&quot;
   }
 }</component>
   <component name="MacroExpansionManager">
@@ -100,6 +100,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.14 (CRM)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -135,6 +136,7 @@
       <updated>1774976536403</updated>
       <workItem from="1775021672977" duration="3479000" />
       <workItem from="1775060074630" duration="1246000" />
+      <workItem from="1775110623779" duration="604000" />
     </task>
     <task id="LOCAL-00001" summary="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да">
       <option name="closed" value="true" />
@@ -144,7 +146,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775024263206</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Написал новости">
+      <option name="closed" value="true" />
+      <created>1775062807496</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1775062807496</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -163,6 +173,18 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да" />
+    <MESSAGE value="Написал новости" />
+    <option name="LAST_COMMIT_MESSAGE" value="Написал новости" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/app/api/endpoints/admin.py</url>
+          <line>79</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

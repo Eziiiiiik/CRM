@@ -123,3 +123,13 @@ async def get_users():
             for uid, user in users_db.items()
         ]
     }
+
+@router.get("/profile", response_class=HTMLResponse)
+async def profile_page(request: Request):
+    """Личный кабинет пользователя"""
+    return HTMLResponse(content=read_html("profile.html"))
+
+@router.get("/admin", response_class=HTMLResponse)
+async def admin_panel(request: Request):
+    """Админ-панель"""
+    return HTMLResponse(content=read_html("admin/index.html"))

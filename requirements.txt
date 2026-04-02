@@ -15,3 +15,5 @@ python-multipart
 email-validator
 jinja2
 PyJWT
+passlib[bcrypt]
+bcrypt

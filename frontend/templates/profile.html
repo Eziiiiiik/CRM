@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Крипто Хаб</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .profile-section {
+            padding: 100px 0 60px;
+            min-height: 100vh;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--pink);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: var(--pink-glow);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .profile-email {
+            color: var(--text-dim);
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            border-radius: 10px;
+            padding: 15px 25px;
+            text-align: center;
+        }
+
+        .stat-badge-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--pink);
+        }
+
+        .stat-badge-label {
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 5px;
+        }
+
+        .profile-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .profile-tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .profile-tab.active {
+            color: var(--pink);
+            border-bottom: 2px solid var(--pink);
+        }
+
+        .profile-tab-content {
+            display: none;
+        }
+
+        .profile-tab-content.active {
+            display: block;
+        }
+
+        /* Таблица сделок */
+        .deals-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .deals-table th,
+        .deals-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .deals-table th {
+            color: var(--pink);
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .status-new { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+        .status-negotiation { background: rgba(243, 156, 18, 0.2); color: #f39c12; }
+        .status-contract { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        .status-won { background: rgba(39, 174, 96, 0.2); color: #27ae60; }
+        .status-lost { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+
+        /* Форма редактирования */
+        .edit-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-dim);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: var(--pink-glow);
+        }
+
+        .btn-save {
+            background: var(--pink);
+            color: black;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .interactions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .interaction-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .interaction-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .interaction-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-top: 8px;
+        }
+
+        .loader {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-dim);
+        }
+
+        @media (max-width: 768px) {
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .deals-table {
+                font-size: 12px;
+            }
+
+            .deals-table th,
+            .deals-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">КРИПТО</span> ХАБ
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/news">Новости</a>
+                <a href="/dashboard">Статистика</a>
+            </div>
+            <div class="nav-buttons">
+                <a href="/chat" class="chat-nav-button">ЧАТЫ</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="profile-section">
+        <div class="container">
+            <div id="profile-content">
+                <div class="loader">Загрузка профиля...</div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">© 2024 Крипто Хаб</div>
+                <div class="footer-links">
+                    <a href="/">Главная</a>
+                    <a href="/news">Новости</a>
+                    <a href="/dashboard">Статистика</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        async function fetchWithAuth(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                throw new Error('Unauthorized');
+            }
+
+            return response;
+        }
+
+        async function loadProfile() {
+            try {
+                const [meResponse, dealsResponse] = await Promise.all([
+                    fetchWithAuth('/api/v1/auth/me'),
+                    fetchWithAuth('/api/v1/clients/my/deals')
+                ]);
+
+                const user = await meResponse.json();
+                const dealsData = await dealsResponse.json();
+
+                renderProfile(user, dealsData);
+
+                const interactionsResponse = await fetchWithAuth('/api/v1/clients/my/interactions?limit=10');
+                const interactions = await interactionsResponse.json();
+                renderInteractions(interactions);
+
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('profile-content').innerHTML = `
+                    <div class="empty-message">❌ Ошибка загрузки профиля</div>
+                `;
+            }
+        }
+
+        function renderProfile(user, dealsData) {
+            const client = dealsData.client || {};
+            const stats = dealsData.stats || { total_deals: 0, active_deals: 0, won_deals: 0, total_amount: 0 };
+            const deals = dealsData.deals || [];
+
+            const html = `
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        👤
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name">${escapeHtml(client.full_name || user.username || 'Пользователь')}</h1>
+                        <div class="profile-email">${escapeHtml(user.email)}</div>
+                        <div class="profile-phone">${escapeHtml(client.phone || 'Телефон не указан')}</div>
+                        <div class="profile-stats">
+                            <div class="stat-badge">
+                                <div class="stat-badge-value">${stats.total_deals}</div>
+                                <div class="stat-badge-label">Всего сделок</div>
+                            </div>
+                            <div class="stat-badge">
+                                <div class="stat-badge-value">${stats.active_deals}</div>
+                                <div class="stat-badge-label">Активных</div>
+                            </div>
+                            <div class="stat-badge">
+                                <div class="stat-badge-value">${stats.won_deals}</div>
+                                <div class="stat-badge-label">Выиграно</div>
+                            </div>
+                            <div class="stat-badge">
+                                <div class="stat-badge-value">${formatMoney(stats.total_amount)}</div>
+                                <div class="stat-badge-label">Общая сумма</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-tabs">
+                    <button class="profile-tab active" data-tab="deals">📋 Мои сделки</button>
+                    <button class="profile-tab" data-tab="interactions">💬 История</button>
+                    <button class="profile-tab" data-tab="settings">⚙️ Настройки</button>
+                </div>
+
+                <div id="tab-deals" class="profile-tab-content active">
+                    ${renderDealsTable(deals)}
+                </div>
+
+                <div id="tab-interactions" class="profile-tab-content">
+                    <div id="interactions-list" class="interactions-list">
+                        <div class="loader">Загрузка истории...</div>
+                    </div>
+                </div>
+
+                <div id="tab-settings" class="profile-tab-content">
+                    <div class="edit-form">
+                        <h3>Редактировать профиль</h3>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label>Имя</label>
+                                <input type="text" id="edit-name" value="${escapeHtml(client.full_name || '')}" placeholder="Ваше имя">
+                            </div>
+                            <div class="form-group">
+                                <label>Телефон</label>
+                                <input type="tel" id="edit-phone" value="${escapeHtml(client.phone || '')}" placeholder="+7 (999) 123-45-67">
+                            </div>
+                            <div class="form-group">
+                                <label>Компания</label>
+                                <input type="text" id="edit-company" value="${escapeHtml(client.company || '')}" placeholder="Название компании">
+                            </div>
+                            <button type="submit" class="btn-save">Сохранить изменения</button>
+                            <button type="button" class="btn-logout" onclick="logout()">Выйти</button>
+                        </form>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('profile-content').innerHTML = html;
+
+            document.querySelectorAll('.profile-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.profile-tab-content').forEach(c => c.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                });
+            });
+
+            document.getElementById('profile-form').addEventListener('submit', saveProfile);
+        }
+
+        function renderDealsTable(deals) {
+            if (!deals || deals.length === 0) {
+                return '<div class="empty-message">📭 У вас пока нет сделок</div>';
+            }
+
+            return `
+                <table class="deals-table">
+                    <thead>
+                        <tr><th>Название</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr>
+                    </thead>
+                    <tbody>
+                        ${deals.map(deal => `
+                            <tr>
+                                <td>${escapeHtml(deal.name)}</td>
+                                <td>${formatMoney(deal.amount)} ${deal.currency}</td>
+                                <td><span class="status-badge status-${deal.status}">${getStatusText(deal.status)}</span></td>
+                                <td>${formatDate(deal.created_at)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function renderInteractions(interactions) {
+            const container = document.getElementById('interactions-list');
+
+            if (!interactions || interactions.length === 0) {
+                container.innerHTML = '<div class="empty-message">💬 История взаимодействий пуста</div>';
+                return;
+            }
+
+            container.innerHTML = interactions.map(i => `
+                <div class="interaction-item">
+                    <div class="interaction-title">${escapeHtml(i.title)}</div>
+                    <div class="interaction-description">${escapeHtml(i.description || '')}</div>
+                    <div class="interaction-meta">
+                        <span>📋 ${getInteractionType(i.type)}</span>
+                        <span>📅 ${formatDate(i.created_at)}</span>
+                        <span>${i.status === 'completed' ? '✅ Завершено' : '⏳ В процессе'}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('edit-name').value;
+            const phone = document.getElementById('edit-phone').value;
+            const company = document.getElementById('edit-company').value;
+
+            // Разделяем ФИО на части
+            const nameParts = fullName.trim().split(' ');
+
+            try {
+                await fetchWithAuth('/api/v1/clients/my', {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        last_name: nameParts[0] || '',
+                        first_name: nameParts[1] || '',
+                        middle_name: nameParts[2] || '',
+                        phone: phone,
+                        company: company
+                    })
+                });
+
+                alert('Профиль обновлён!');
+                location.reload();
+
+            } catch (error) {
+                alert('Ошибка при сохранении');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        function formatMoney(amount) {
+            if (!amount) return '0 ₽';
+            return new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '—';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('ru-RU');
+        }
+
+        function getStatusText(status) {
+            const statuses = {
+                'new': '🆕 Новая',
+                'contact': '📞 Контакт',
+                'negotiation': '🤝 Переговоры',
+                'proposal': '📄 Предложение',
+                'contract': '📝 Договор',
+                'won': '✅ Выиграна',
+                'lost': '❌ Проиграна',
+                'postponed': '⏸ Отложена'
+            };
+            return statuses[status] || status;
+        }
+
+        function getInteractionType(type) {
+            const types = {
+                'call': '📞 Звонок',
+                'meeting': '🤝 Встреча',
+                'email': '📧 Письмо',
+                'sms': '💬 СМС',
+                'messenger': '💭 Мессенджер',
+                'task': '✅ Задача',
+                'note': '📝 Заметка'
+            };
+            return types[type] || type;
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>

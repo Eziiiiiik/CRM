@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - CRM</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Боковое меню */
+        .admin-sidebar {
+            width: 280px;
+            background: #0a0a0a;
+            border-right: 1px solid rgba(255, 0, 255, 0.2);
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .admin-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .admin-menu {
+            list-style: none;
+        }
+
+        .admin-menu-item {
+            margin-bottom: 10px;
+        }
+
+        .admin-menu-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: var(--text-dim);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .admin-menu-link:hover,
+        .admin-menu-link.active {
+            background: rgba(255, 0, 255, 0.1);
+            color: var(--pink);
+        }
+
+        /* Основной контент */
+        .admin-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--pink);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .data-table th {
+            color: var(--pink);
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-warning {
+            background: orange;
+            color: black;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Боковое меню -->
+        <aside class="admin-sidebar">
+            <div class="admin-logo">
+                <span class="pink">CRM</span> Admin
+            </div>
+            <ul class="admin-menu">
+                <li class="admin-menu-item">
+                    <a href="#" class="admin-menu-link active" data-page="dashboard">
+                        📊 Дашборд
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" class="admin-menu-link" data-page="clients">
+                        👥 Клиенты
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" class="admin-menu-link" data-page="deals">
+                        💼 Сделки
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" class="admin-menu-link" data-page="users">
+                        👤 Пользователи
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="#" class="admin-menu-link" data-page="settings">
+                        ⚙️ Настройки
+                    </a>
+                </li>
+                <li class="admin-menu-item">
+                    <a href="/" class="admin-menu-link">
+                        🏠 На сайт
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Контент -->
+        <main class="admin-content">
+            <div class="admin-header">
+                <h1 id="page-title">Панель управления</h1>
+                <button onclick="logout()" class="btn-outline">Выйти</button>
+            </div>
+            <div id="page-content">
+                <div class="loader">Загрузка...</div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const token = localStorage.getItem('token');
+
+        if (!token) {
+            window.location.href = '/login';
+        }
+
+        let currentPage = 'dashboard';
+
+        async function fetchAdmin(url, options = {}) {
+            const response = await fetch(`/api/v1/admin${url}`, {
+                ...options,
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                }
+            });
+
+            if (response.status === 403) {
+                alert('Нет доступа. Требуются права администратора.');
+                window.location.href = '/';
+                throw new Error('Forbidden');
+            }
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                throw new Error('Unauthorized');
+            }
+            return response;
+        }
+
+        async function loadDashboard() {
+            try {
+                const response = await fetchAdmin('/stats');
+                const stats = await response.json();
+
+                const html = `
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.total_clients}</div>
+                            <div class="stat-label">Всего клиентов</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.total_deals}</div>
+                            <div class="stat-label">Всего сделок</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${stats.total_users}</div>
+                            <div class="stat-label">Пользователей</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">${formatMoney(stats.total_amount)}</div>
+                            <div class="stat-label">Общая сумма</div>
+                        </div>
+                    </div>
+
+                    <h3>⏳ Сделки, требующие внимания</h3>
+                    <div id="pending-deals"></div>
+                `;
+
+                document.getElementById('page-content').innerHTML = html;
+                loadPendingDeals();
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadPendingDeals() {
+            try {
+                const response = await fetchAdmin('/pending-deals');
+                const deals = await response.json();
+
+                const html = `
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>Название</th><th>Клиент</th><th>Сумма</th><th>Статус</th><th>Дедлайн</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${deals.map(d => `
+                                <tr>
+                                    <td>${escapeHtml(d.name)}</td>
+                                    <td>${escapeHtml(d.client_name)}</td>
+                                    <td>${formatMoney(d.amount)}</td>
+                                    <td>${d.status}</td>
+                                    <td>${d.expected_close_date ? new Date(d.expected_close_date).toLocaleDateString() : '—'}</td>
+                                    <td><button class="btn-warning" onclick="updateDealStatus(${d.id})">Обновить</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('pending-deals').innerHTML = deals.length ? html : '<p>Нет сделок, требующих внимания</p>';
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadClients() {
+            try {
+                const response = await fetchAdmin('/clients?limit=100');
+                const clients = await response.json();
+
+                const html = `
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>ID</th><th>ФИО</th><th>Email</th><th>Телефон</th><th>Компания</th><th>Создан</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${clients.map(c => `
+                                <tr>
+                                    <td>${c.id}</td>
+                                    <td>${escapeHtml(c.full_name)}</td>
+                                    <td>${escapeHtml(c.email)}</td>
+                                    <td>${c.phone || '—'}</td>
+                                    <td>${c.company || '—'}</td>
+                                    <td>${new Date(c.created_at).toLocaleDateString()}</td>
+                                    <td><button class="btn-danger" onclick="deleteClient(${c.id})">Удалить</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('page-content').innerHTML = html;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetchAdmin('/users');
+                const users = await response.json();
+
+                const html = `
+                    <button onclick="showCreateUserForm()" class="btn-primary" style="margin-bottom: 20px;">+ Создать пользователя</button>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>ID</th><th>Имя</th><th>Email</th><th>Активен</th><th>Создан</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                            ${users.map(u => `
+                                <tr>
+                                    <td>${u.id}</td>
+                                    <td>${escapeHtml(u.username)}</td>
+                                    <td>${escapeHtml(u.email)}</td>
+                                    <td>${u.is_active ? '✅' : '❌'}</td>
+                                    <td>${new Date(u.created_at).toLocaleDateString()}</td>
+                                    <td><button class="btn-danger" onclick="deleteUser(${u.id})">Удалить</button></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+                document.getElementById('page-content').innerHTML = html;
+
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function updateDealStatus(dealId) {
+            const newStatus = prompt('Введите новый статус (new/contact/negotiation/proposal/contract/won/lost)');
+            if (newStatus) {
+                fetchAdmin(`/deals/${dealId}/status?status=${newStatus}`, { method: 'PUT' })
+                    .then(() => loadDashboard())
+                    .catch(console.error);
+            }
+        }
+
+        function deleteClient(clientId) {
+            if (confirm('Удалить клиента?')) {
+                fetchAdmin(`/clients/${clientId}`, { method: 'DELETE' })
+                    .then(() => loadClients())
+                    .catch(console.error);
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Удалить пользователя?')) {
+                fetchAdmin(`/users/${userId}`, { method: 'DELETE' })
+                    .then(() => loadUsers())
+                    .catch(console.error);
+            }
+        }
+
+        function showCreateUserForm() {
+            const username = prompt('Имя пользователя');
+            const email = prompt('Email');
+            const password = prompt('Пароль');
+
+            if (username && email && password) {
+                fetchAdmin('/users', {
+                    method: 'POST',
+                    body: JSON.stringify({ username, email, password })
+                })
+                .then(() => loadUsers())
+                .catch(console.error);
+            }
+        }
+
+        function formatMoney(amount) {
+            return new Intl.NumberFormat('ru-RU').format(amount) + ' ₽';
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        // Навигация
+        document.querySelectorAll('.admin-menu-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const page = link.dataset.page;
+
+                document.querySelectorAll('.admin-menu-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                currentPage = page;
+
+                if (page === 'dashboard') loadDashboard();
+                else if (page === 'clients') loadClients();
+                else if (page === 'users') loadUsers();
+                else if (page === 'deals') loadDashboard(); // временно
+                else if (page === 'settings') document.getElementById('page-content').innerHTML = '<p>Настройки в разработке</p>';
+            });
+        });
+
+        // Загрузка по умолчанию
+        loadDashboard();
+    </script>
+</body>
+</html>

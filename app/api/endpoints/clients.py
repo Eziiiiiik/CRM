@@ -3,15 +3,18 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, or_
 from sqlalchemy.orm import selectinload
-# from datetime import date  ← УДАЛЕНО!
 
 from app.core.database import get_db
 from app.models.client import Client, Tag
+from app.models.deal import Deal  # ← ДОБАВИТЬ
+from app.models.interaction import Interaction  # ← ДОБАВИТЬ
+from app.models.user import User  # ← ДОБАВИТЬ
 from app.schemas.client import (
     ClientCreate, ClientUpdate, ClientResponse,
     ClientDetailResponse, TagCreate, TagResponse
 )
 from app.core.segment_engine import SegmentUpdater
+from app.api.endpoints.auth import get_current_user  # ← ДОБАВИТЬ
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
@@ -25,7 +28,6 @@ async def get_clients(
         search: Optional[str] = Query(None, description="Поиск по имени, email, телефону"),
         tag: Optional[str] = Query(None, description="Фильтр по тегу"),
         is_active: Optional[bool] = Query(None, description="Фильтр по статусу"),
-        # Параметры min_age и max_age УДАЛЕНЫ
         db: AsyncSession = Depends(get_db)
 ):
     """
@@ -33,7 +35,6 @@ async def get_clients(
     """
     query = select(Client).options(selectinload(Client.tags))
 
-    # Поиск по тексту
     if search:
         search_filter = or_(
             Client.last_name.ilike(f"%{search}%"),
@@ -44,20 +45,17 @@ async def get_clients(
         )
         query = query.where(search_filter)
 
-    # Фильтр по тегу
     if tag:
         query = query.join(Client.tags).where(Tag.name == tag)
 
-    # Фильтр по активности
     if is_active is not None:
         query = query.where(Client.is_active == is_active)
-
-    # Блок с фильтром по возрасту ПОЛНОСТЬЮ УДАЛЕН
 
     query = query.offset(skip).limit(limit).order_by(Client.created_at.desc())
     result = await db.execute(query)
     clients = result.scalars().all()
     return clients
+
 
 @router.get("/stats", response_model=dict)
 async def get_clients_stats(
@@ -122,7 +120,6 @@ async def create_client(
     """
     Создать нового клиента
     """
-    # Проверяем уникальность email
     query = select(Client).where(Client.email == client_data.email)
     result = await db.execute(query)
     if result.scalar_one_or_none():
@@ -131,13 +128,11 @@ async def create_client(
             detail="Client with this email already exists"
         )
 
-    # Создаём клиента
     client = Client(**client_data.model_dump())
     db.add(client)
     await db.commit()
     await db.refresh(client)
 
-    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
 
@@ -160,15 +155,12 @@ async def update_client(
             detail=f"Client with id {client_id} not found"
         )
 
-    # Обновляем только переданные поля
     update_data = client_data.model_dump(exclude_unset=True)
 
-    # Специальная обработка JSON полей
     for field in ['messengers', 'social_networks', 'addresses', 'communication_preferences']:
         if field in update_data and update_data[field] is not None:
             setattr(client, field, update_data[field])
 
-    # Обычные поля
     for field, value in update_data.items():
         if field not in ['messengers', 'social_networks', 'addresses', 'communication_preferences']:
             setattr(client, field, value)
@@ -176,7 +168,6 @@ async def update_client(
     await db.commit()
     await db.refresh(client)
 
-    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
 
@@ -201,7 +192,6 @@ async def delete_client(
     client.is_active = False
     await db.commit()
 
-    # Обновляем сегменты
     updater = SegmentUpdater(db)
     await updater.update_client_segments(client.id)
 
@@ -296,3 +286,109 @@ async def remove_tag_from_client(
         await db.commit()
 
     return {"message": "Tag removed"}
+
+
+# ========== Эндпоинты для личного кабинета ==========
+
+@router.get("/my/deals")
+async def get_my_deals(
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
+):
+    """Получить сделки текущего клиента"""
+    result = await db.execute(select(Client).where(Client.email == current_user.email))
+    client = result.scalar_one_or_none()
+
+    if not client:
+        return {"deals": []}
+
+    deals_result = await db.execute(
+        select(Deal).where(Deal.client_id == client.id).order_by(Deal.created_at.desc())
+    )
+    deals = deals_result.scalars().all()
+
+    return {
+        "client": {
+            "id": client.id,
+            "full_name": client.full_name,
+            "email": client.email,
+            "phone": client.phone,
+            "company": client.company
+        },
+        "deals": [
+            {
+                "id": d.id,
+                "name": d.name,
+                "amount": d.amount,
+                "currency": d.currency,
+                "status": d.status.value,
+                "probability": d.probability,
+                "created_at": d.created_at,
+                "expected_close_date": d.expected_close_date
+            }
+            for d in deals
+        ],
+        "stats": {
+            "total_deals": len(deals),
+            "active_deals": len([d for d in deals if d.is_active()]),
+            "won_deals": len([d for d in deals if d.status.value == "won"]),
+            "total_amount": sum(d.amount for d in deals)
+        }
+    }
+
+
+@router.get("/my/interactions")
+async def get_my_interactions(
+        limit: int = 20,
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
+):
+    """Получить историю взаимодействий текущего клиента"""
+    result = await db.execute(select(Client).where(Client.email == current_user.email))
+    client = result.scalar_one_or_none()
+
+    if not client:
+        return {"interactions": []}
+
+    interactions_result = await db.execute(
+        select(Interaction)
+        .where(Interaction.client_id == client.id)
+        .order_by(Interaction.created_at.desc())
+        .limit(limit)
+    )
+    interactions = interactions_result.scalars().all()
+
+    return [
+        {
+            "id": i.id,
+            "type": i.type,
+            "title": i.title,
+            "description": i.description,
+            "created_at": i.created_at,
+            "status": i.status
+        }
+        for i in interactions
+    ]
+
+
+@router.put("/my")
+async def update_my_profile(
+        client_data: ClientUpdate,
+        current_user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db)
+):
+    """Обновить профиль текущего клиента"""
+    result = await db.execute(select(Client).where(Client.email == current_user.email))
+    client = result.scalar_one_or_none()
+
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+
+    update_data = client_data.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(client, field, value)
+
+    await db.commit()
+    await db.refresh(client)
+
+    return {"message": "Profile updated", "client_id": client.id}
