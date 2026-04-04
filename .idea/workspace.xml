@@ -19,22 +19,31 @@
         <feature name="default" enabled="true" />
       </package>
     </cargoProject>
+    <cargoProject FILE="$PROJECT_DIR$/telephony-service/Cargo.toml">
+      <package file="$PROJECT_DIR$/telephony-service">
+        <feature name="default" enabled="true" />
+      </package>
+    </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Написал новости">
-      <change afterPath="$PROJECT_DIR$/webhook-service/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/config.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/handlers/health.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/handlers/max.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/handlers/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/handlers/yookassa.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/models/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/models/webhook.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/services/crypto.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/services/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/services/processor.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/webhook-service/src/services/queue.rs" afterDir="false" />
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавляю веб хук">
+      <change afterPath="$PROJECT_DIR$/telephony-service/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/migrations/dbtelephony.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/billing/calculator.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/config.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/db.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/admin.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/calls.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/models.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,8 +54,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
-        <option value="Dockerfile" />
         <option value="Rust File" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>
@@ -59,12 +68,12 @@
     &quot;assignee&quot;: &quot;Eziiiiiik&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Eziiiiiik/CRM.git",
-    "accountId": "0fb0af70-7028-4619-baca-2c19c3e6fb34"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Eziiiiiik/CRM.git&quot;,
+    &quot;accountId&quot;: &quot;0fb0af70-7028-4619-baca-2c19c3e6fb34&quot;
   }
-}]]></component>
+}</component>
   <component name="MacroExpansionManager">
     <option name="directoryName" value="S0TQZrXq" />
   </component>
@@ -79,32 +88,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.run.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.rust.reset.selective.auto.import": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "Merging master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/config.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/health.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/max.rs": "true",
-    "org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/yookassa.rs": "true",
-    "org.rust.hideNoCargoProjectNotificationsC:/Users/frien/CRM/chat-server/Cargo.toml": "true",
-    "org.rust.hideNoCargoProjectNotificationsC:/Users/frien/CRM/gateway/Cargo.toml": "true",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;org.rust.cargo.project.model.PROJECT_DISCOVERY&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/config.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/health.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/max.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.disableDetachedFileInspectionC:/Users/frien/CRM/webhook-service/src/handlers/yookassa.rs&quot;: &quot;true&quot;,
+    &quot;org.rust.hideNoCargoProjectNotificationsC:/Users/frien/CRM/chat-server/Cargo.toml&quot;: &quot;true&quot;,
+    &quot;org.rust.hideNoCargoProjectNotificationsC:/Users/frien/CRM/gateway/Cargo.toml&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager">
     <configuration name="run" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <option name="ENV_FILES" value="" />
@@ -150,7 +159,8 @@
       <workItem from="1775021672977" duration="3479000" />
       <workItem from="1775060074630" duration="1246000" />
       <workItem from="1775110623779" duration="604000" />
-      <workItem from="1775236916216" duration="902000" />
+      <workItem from="1775236916216" duration="1064000" />
+      <workItem from="1775313921875" duration="1842000" />
     </task>
     <task id="LOCAL-00001" summary="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да">
       <option name="closed" value="true" />
@@ -176,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775114379809</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Добавляю веб хук">
+      <option name="closed" value="true" />
+      <created>1775237974799</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1775237974799</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -197,7 +215,8 @@
     <MESSAGE value="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да" />
     <MESSAGE value="Написал новости" />
     <MESSAGE value="сделал админ панель, сделал профиль" />
-    <option name="LAST_COMMIT_MESSAGE" value="сделал админ панель, сделал профиль" />
+    <MESSAGE value="Добавляю веб хук" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавляю веб хук" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

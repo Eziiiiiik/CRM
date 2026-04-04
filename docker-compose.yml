@@ -25,3 +25,21 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+
+    telephony:
+      build: ./telephony-service
+      ports:
+        - "8003:8003"
+      volumes:
+        - ./telephony.db:/app/telephony.db
+      environment:
+        - DATABASE_URL=sqlite:///app/telephony.db
+        - VOXIMPLANT_ACCOUNT_ID=${VOXIMPLANT_ACCOUNT_ID}
+        - VOXIMPLANT_API_KEY=${VOXIMPLANT_API_KEY}
+        - VOXIMPLANT_API_SECRET=${VOXIMPLANT_API_SECRET}
+        - TELEPHONY_HOST=0.0.0.0
+        - TELEPHONY_PORT=8003
+        - FASTAPI_URL=http://fastapi:8001
+      depends_on:
+        - fastapi
+      restart: unless-stopped
