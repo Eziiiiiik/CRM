@@ -26,24 +26,16 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавляю веб хук">
-      <change afterPath="$PROJECT_DIR$/telephony-service/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/migrations/dbtelephony.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/billing/calculator.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/config.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/db.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/admin.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/calls.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/models.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" afterDir="false" />
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавляю телефонию в проект.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/models.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,8 +46,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
-        <option value="Rust File" />
         <option value="Dockerfile" />
+        <option value="Rust File" />
       </list>
     </option>
   </component>
@@ -160,7 +152,7 @@
       <workItem from="1775060074630" duration="1246000" />
       <workItem from="1775110623779" duration="604000" />
       <workItem from="1775236916216" duration="1064000" />
-      <workItem from="1775313921875" duration="1842000" />
+      <workItem from="1775313921875" duration="4648000" />
     </task>
     <task id="LOCAL-00001" summary="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да">
       <option name="closed" value="true" />
@@ -194,7 +186,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775237974799</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Добавляю телефонию в проект.">
+      <option name="closed" value="true" />
+      <created>1775316624169</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1775316624169</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -216,7 +216,8 @@
     <MESSAGE value="Написал новости" />
     <MESSAGE value="сделал админ панель, сделал профиль" />
     <MESSAGE value="Добавляю веб хук" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавляю веб хук" />
+    <MESSAGE value="Добавляю телефонию в проект." />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавляю телефонию в проект." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

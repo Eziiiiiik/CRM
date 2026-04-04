@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use crate::models::{CallRecord, SmsRecord};
 use sqlx::SqlitePool;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -24,24 +23,36 @@ pub struct VoximplantSmsWebhook {
 }
 
 pub async fn handle_call_webhook(
-    pool: &SqlitePool,
+    _pool: &SqlitePool,
     payload: &VoximplantCallWebhook,
 ) -> Result<(), anyhow::Error> {
-    println!("📞 Обработка звонка: {:?}", payload);
+    println!("📞 Обработка звонка: call_id={}, from={}, to={}, duration={:?}",
+             payload.call_id,
+             payload.caller_number,
+             payload.callee_number,
+             payload.duration
+    );
 
     // TODO: найти номер в БД, найти клиента, сохранить запись о звонке
+    // Пока просто логируем
 
     Ok(())
 }
 
 pub async fn handle_sms_webhook(
-    pool: &SqlitePool,
+    _pool: &SqlitePool,
     payload: &VoximplantSmsWebhook,
 ) -> Result<(), anyhow::Error> {
-    println!("💬 Обработка SMS: {:?}", payload);
+    println!("💬 Обработка SMS: message_id={}, from={}, to={}, text={}",
+             payload.message_id,
+             payload.from,
+             payload.to,
+             &payload.text[..payload.text.len().min(50)]
+    );
 
     // TODO: сохранить SMS в БД
     // TODO: отправить уведомление клиенту
+    // Пока просто логируем
 
     Ok(())
 }
