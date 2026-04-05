@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AutoImportSettings">
-    <option name="autoReloadType" value="SELECTIVE" />
+    <option name="autoReloadType" value="ALL" />
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/gateway/Cargo.toml">
@@ -26,16 +26,11 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавляю телефонию в проект.">
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Сделал код ревью">
+      <change afterPath="$PROJECT_DIR$/app/models/webhook.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/billing/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/clients.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/handlers/numbers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/models.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/models.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/client.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/mod.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" beforeDir="false" afterPath="$PROJECT_DIR$/telephony-service/src/voximplant/webhook.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,9 +40,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Python Script" />
         <option value="Dockerfile" />
         <option value="Rust File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -63,7 +58,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/Eziiiiiik/CRM.git&quot;,
-    &quot;accountId&quot;: &quot;0fb0af70-7028-4619-baca-2c19c3e6fb34&quot;
+    &quot;accountId&quot;: &quot;409e57b4-6663-42c0-87a8-f0c3903edbd8&quot;
   }
 }</component>
   <component name="MacroExpansionManager">
@@ -83,13 +78,20 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;Python.run.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.GoLinterPluginOnboardingV2&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.analysis.ui.options.defaults&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/frien/CRM&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -115,6 +117,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.14 (CRM) (2)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -152,7 +155,7 @@
       <workItem from="1775060074630" duration="1246000" />
       <workItem from="1775110623779" duration="604000" />
       <workItem from="1775236916216" duration="1064000" />
-      <workItem from="1775313921875" duration="4648000" />
+      <workItem from="1775313921875" duration="4725000" />
     </task>
     <task id="LOCAL-00001" summary="Добавил в проект докер(давно надо было, а то бедный друг который фронт пишет(гадал на картах таро чтобы вебдизайн написать пазпхапа)) вообще много чего сделал, но так впадлу описывать каждое, поэтому да">
       <option name="closed" value="true" />
@@ -194,7 +197,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775316624169</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Сделал код ревью">
+      <option name="closed" value="true" />
+      <created>1775319416401</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1775319416401</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -217,17 +228,7 @@
     <MESSAGE value="сделал админ панель, сделал профиль" />
     <MESSAGE value="Добавляю веб хук" />
     <MESSAGE value="Добавляю телефонию в проект." />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавляю телефонию в проект." />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/app/api/endpoints/admin.py</url>
-          <line>79</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Сделал код ревью" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сделал код ревью" />
   </component>
 </project>
