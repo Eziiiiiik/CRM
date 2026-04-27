@@ -6,15 +6,15 @@ from sqlalchemy.orm import selectinload
 
 from app.core.database import get_db
 from app.models.client import Client, Tag
-from app.models.deal import Deal  # ← ДОБАВИТЬ
-from app.models.interaction import Interaction  # ← ДОБАВИТЬ
-from app.models.user import User  # ← ДОБАВИТЬ
+from app.models.deal import Deal
+from app.models.interaction import Interaction
+from app.models.user import User
 from app.schemas.client import (
     ClientCreate, ClientUpdate, ClientResponse,
     ClientDetailResponse, TagCreate, TagResponse
 )
 from app.core.segment_engine import SegmentUpdater
-from app.api.endpoints.auth import get_current_user  # ← ДОБАВИТЬ
+from app.api.endpoints.auth import get_current_user
 
 router = APIRouter(prefix="/clients", tags=["clients"])
 
@@ -289,6 +289,41 @@ async def remove_tag_from_client(
 
 
 # ========== Эндпоинты для личного кабинета ==========
+
+@router.get("/me", response_model=ClientResponse)
+async def get_my_profile(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(select(Client).where(Client.email == current_user.email))
+    client = result.scalar_one_or_none()
+    if not client:
+        # автоматически создаём клиента при первом входе
+        client = Client(
+            email=current_user.email,
+            first_name=current_user.username,
+            last_name=""
+        )
+        db.add(client)
+        await db.commit()
+        await db.refresh(client)
+    return client
+
+@router.put("/me", response_model=ClientResponse)
+async def update_my_profile(
+    client_data: ClientUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(select(Client).where(Client.email == current_user.email))
+    client = result.scalar_one_or_none()
+    if not client:
+        raise HTTPException(404, "Client not found")
+    for field, value in client_data.model_dump(exclude_unset=True).items():
+        setattr(client, field, value)
+    await db.commit()
+    await db.refresh(client)
+    return client
 
 @router.get("/my/deals")
 async def get_my_deals(

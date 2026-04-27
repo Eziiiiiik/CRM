@@ -307,28 +307,34 @@
         }
 
         async function loadProfile() {
-            try {
-                const [meResponse, dealsResponse] = await Promise.all([
-                    fetchWithAuth('/api/v1/auth/me'),
-                    fetchWithAuth('/api/v1/clients/my/deals')
-                ]);
+    try {
+        const [meResponse, dealsResponse] = await Promise.all([
+            fetchWithAuth('/api/v1/auth/me'),
+            fetchWithAuth('/api/v1/clients/my/deals')
+        ]);
 
-                const user = await meResponse.json();
-                const dealsData = await dealsResponse.json();
+        const user = await meResponse.json();
+        const dealsData = await dealsResponse.json();
 
-                renderProfile(user, dealsData);
+        renderProfile(user, dealsData);
 
-                const interactionsResponse = await fetchWithAuth('/api/v1/clients/my/interactions?limit=10');
-                const interactions = await interactionsResponse.json();
-                renderInteractions(interactions);
+        const interactionsResponse = await fetchWithAuth('/api/v1/clients/my/interactions?limit=10');
+        let interactions = await interactionsResponse.json();
 
-            } catch (error) {
-                console.error('Ошибка загрузки:', error);
-                document.getElementById('profile-content').innerHTML = `
-                    <div class="empty-message">❌ Ошибка загрузки профиля</div>
-                `;
-            }
+        // 👇 ВАЖНО: преобразуем ответ в массив, если это объект
+        if (!Array.isArray(interactions)) {
+            interactions = interactions.interactions || [];
         }
+
+        renderInteractions(interactions);
+
+    } catch (error) {
+        console.error('Ошибка загрузки:', error);
+        document.getElementById('profile-content').innerHTML = `
+            <div class="empty-message">❌ Ошибка загрузки профиля</div>
+        `;
+    }
+}
 
         function renderProfile(user, dealsData) {
             const client = dealsData.client || {};
@@ -543,7 +549,11 @@
             return div.innerHTML;
         }
 
+
         loadProfile();
     </script>
+
+<script src="/static/js/main.js"></script>
+
 </body>
 </html>

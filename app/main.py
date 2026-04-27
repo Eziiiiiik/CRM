@@ -4,6 +4,9 @@ from app.ai.routers.chat import router as chat_router
 from app.ai.routers.meetings import router as meetings_router
 import asyncio
 import logging
+from app.api.endpoints import news
+from app.api.endpoints.auth import router as auth_router
+from app.api.endpoints import clients, deals, dashboard, interactions, segments
 
 
 from frontend.main import router as frontend_router
@@ -85,9 +88,15 @@ BASE_DIR = Path(__file__).parent.parent  # поднимаемся на уров�
 STATIC_DIR = BASE_DIR / "frontend" / "static"
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
-# Подключаем роутер фронтенда (В ПЕРВУЮ ОЧЕРЕДЬ)
-app.include_router(frontend_router)
 
+app.include_router(frontend_router)
+print("Frontend router included")
+
+print("Все маршруты:")
+for route in app.routes:
+    print(route.path)
+
+app.include_router(news.router, prefix="/api/v1")
 
 # Подключаем API роутеры
 app.include_router(clients.router, prefix="/api/v1")
@@ -99,3 +108,5 @@ app.include_router(segments.router, prefix="/api/v1")
 # Подключаем AI роутеры
 app.include_router(chat_router, prefix="/api/v1/ai")
 app.include_router(meetings_router, prefix="/api/v1/ai")
+
+app.include_router(auth_router, prefix="/api/v1")

@@ -124,12 +124,12 @@ async def get_users():
         ]
     }
 
-@router.get("/profile", response_class=HTMLResponse)
-async def profile_page(request: Request):
-    """Личный кабинет пользователя"""
-    return HTMLResponse(content=read_html("profile.html"))
 
 @router.get("/admin", response_class=HTMLResponse)
 async def admin_panel(request: Request):
     """Админ-панель"""
     return HTMLResponse(content=read_html("admin/index.html"))
+
+@router.get("/news", response_class=HTMLResponse)
+async def news_page(request: Request):
+    return HTMLResponse(content=read_html("news.html"))
