@@ -26,25 +26,25 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Базы данных перекочевали из SQLite в PostgreSQL">
-      <change afterPath="$PROJECT_DIR$/app/create_admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/static/js/main.js" afterDir="false" />
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Правлю фронтенд, у меня wsl отвалился, поэтому пока без докера и постгресса, потому что мне надо срочно презентовать свой проект">
+      <change afterPath="$PROJECT_DIR$/app/models/notification.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/ai_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/notification_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/css/notifications.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/js/ai-chat.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/js/api.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/js/clients.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/static/js/notifications.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/admin/setup.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/clients.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/api/endpoints/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/auth.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/clients.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/clients.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/api/endpoints/news.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/news.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/api/endpoints/notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/api/endpoints/notifications.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/core/notifications.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/core/notifications.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/create_admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/create_admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/news.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/news.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/user.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/schemas/news.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/schemas/news.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/dashboard.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/news.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/news.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/static/js/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/static/js/main.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/templates/support_chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/support_chat.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +57,7 @@
       <list>
         <option value="Dockerfile" />
         <option value="Rust File" />
+        <option value="HTML File" />
         <option value="Python Script" />
       </list>
     </option>
@@ -99,6 +100,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
     "Python.create_admin.executor": "Run",
     "Python.run.executor": "Run",
     "RunOnceActivity.GoLinterPluginOnboardingV2": "true",
@@ -240,7 +242,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775413416311</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Правлю фронтенд, у меня wsl отвалился, поэтому пока без докера и постгресса, потому что мне надо срочно презентовать свой проект">
+      <option name="closed" value="true" />
+      <created>1777314962884</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1777314962884</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,6 +275,7 @@
     <MESSAGE value="Добавляю телефонию в проект." />
     <MESSAGE value="Сделал код ревью" />
     <MESSAGE value="Базы данных перекочевали из SQLite в PostgreSQL" />
-    <option name="LAST_COMMIT_MESSAGE" value="Базы данных перекочевали из SQLite в PostgreSQL" />
+    <MESSAGE value="Правлю фронтенд, у меня wsl отвалился, поэтому пока без докера и постгресса, потому что мне надо срочно презентовать свой проект" />
+    <option name="LAST_COMMIT_MESSAGE" value="Правлю фронтенд, у меня wsl отвалился, поэтому пока без докера и постгресса, потому что мне надо срочно презентовать свой проект" />
   </component>
 </project>

@@ -75,3 +75,44 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db: AsyncSessi
         raise HTTPException(status_code=401, detail="Incorrect email or password")
     access_token = create_access_token(data={"sub": user.email})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get("/setup-needed")
+async def setup_needed(db: AsyncSession = Depends(get_db)):
+    """Проверяет, есть ли в системе хотя бы один администратор"""
+    result = await db.execute(select(User).where(User.is_admin == True))
+    admin_exists = result.scalar_one_or_none() is not None
+    return {"setup_needed": not admin_exists}
+
+
+@router.post("/setup-admin", response_model=Token)
+async def setup_admin(
+        user_data: UserCreate,
+        db: AsyncSession = Depends(get_db)
+):
+    """Создаёт первого администратора (доступно только если админов нет)"""
+    # Проверяем, что админов ещё нет
+    result = await db.execute(select(User).where(User.is_admin == True))
+    if result.scalar_one_or_none():
+        raise HTTPException(status_code=403, detail="Admin already exists")
+
+    # Проверяем, не занят ли email
+    result = await db.execute(select(User).where(User.email == user_data.email))
+    if result.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="Email already registered")
+
+    # Создаём администратора
+    user = User(
+        username=user_data.username,
+        email=user_data.email,
+        hashed_password=get_password_hash(user_data.password),
+        is_active=True,
+        is_admin=True
+    )
+    db.add(user)
+    await db.commit()
+    await db.refresh(user)
+
+    # Сразу выдаём токен
+    access_token = create_access_token(data={"sub": user.email})
+    return {"access_token": access_token, "token_type": "bearer"}

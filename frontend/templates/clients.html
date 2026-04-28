@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиенты — CRM</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/notifications.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">CRM</span> Clients
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/news">Новости</a>
+                <a href="/dashboard">Статистика</a>
+                <a href="/clients" class="active">Клиенты</a>
+            </div>
+            <div class="nav-buttons" id="nav-buttons">
+                <!-- Заполняется через main.js (динамически) -->
+            </div>
+        </div>
+    </nav>
+
+    <section class="dashboard-section"> <!-- используем существующий класс для отступов -->
+        <div class="container">
+            <div id="clients-page">
+                <h1 style="margin-bottom: 30px;">Управление <span class="pink">клиентами</span></h1>
+
+                <!-- Форма добавления/редактирования -->
+                <div class="client-form-section">
+                    <h2 id="form-title">Добавить клиента</h2>
+                    <form id="client-form">
+                        <div class="form-group">
+                            <label for="first_name">Имя *</label>
+                            <input type="text" id="first_name" name="first_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Фамилия *</label>
+                            <input type="text" id="last_name" name="last_name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Телефон</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="company">Компания</label>
+                            <input type="text" id="company" name="company">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" id="submit-btn" class="btn-primary">Добавить</button>
+                            <button type="button" id="cancel-edit" class="btn-outline" style="display:none;">Отмена</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Таблица клиентов -->
+                <h2>Список клиентов</h2>
+                <table id="clients-table">
+                    <thead>
+                        <tr>
+                            <th>Имя</th>
+                            <th>Фамилия</th>
+                            <th>Email</th>
+                            <th>Телефон</th>
+                            <th>Компания</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- Контейнер для toast-уведомлений -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="/static/js/api.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/notifications.js"></script>
+    <script src="/static/js/clients.js"></script>
+    <script>
+        // Принудительно обновим UI после загрузки (main.js)
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof updateUI === 'function') updateUI();
+        });
+    </script>
+</body>
+</html>

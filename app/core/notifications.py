@@ -16,6 +16,22 @@ class ConnectionManager:
     Отслеживает активные подключения и отправляет уведомления.
     """
 
+    # app/core/notifications.py – внутри класса ConnectionManager
+
+    async def send_personal_message(self, message: dict, user_id: int, db: AsyncSession = None):
+        """Отправляет сообщение и сохраняет в БД, если передан db."""
+        if db is not None:
+            # Сохраняем уведомление в БД
+            from app.services.notification_service import NotificationService
+            service = NotificationService(db)
+            await service.create_notification(
+                user_id=user_id,
+                title=message.get("title", "Уведомление"),
+                message=message.get("message", ""),
+                notification_type=message.get("type", "info"),
+            )
+        # ... остальная логика отправки через WebSocket ...
+
     def __init__(self):
         # Храним активные подключения: user_id -> список WebSocket
         self.active_connections: Dict[int, Set[WebSocket]] = {}

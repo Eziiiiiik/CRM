@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание администратора</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .setup-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at 50% 50%, #1a001a 0%, #000 100%);
+        }
+        .setup-card {
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--pink);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--pink-glow-strong);
+        }
+        .setup-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .setup-title h1 {
+            font-size: 28px;
+        }
+        .setup-title p {
+            color: var(--text-dim);
+            margin-top: 10px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--pink);
+            font-weight: bold;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            border-radius: 6px;
+            color: white;
+            font-size: 16px;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--pink);
+            box-shadow: var(--pink-glow);
+        }
+        .error-message {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff8888;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .btn-create {
+            width: 100%;
+            padding: 14px;
+            background: var(--pink);
+            color: black;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--pink-glow-strong);
+        }
+        .warning {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-dim);
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <div class="setup-card">
+            <div class="setup-title">
+                <h1>👑 <span class="pink">Создание администратора</span></h1>
+                <p>Заполните форму для создания первого администратора CRM</p>
+            </div>
+
+            <div id="error-message" class="error-message" style="display: none;"></div>
+
+            <form id="setup-form">
+                <div class="form-group">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required placeholder="admin" minlength="3">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="admin@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required placeholder="••••••••" minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirm">Подтверждение пароля</label>
+                    <input type="password" id="confirm" name="confirm" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn-create">СОЗДАТЬ АДМИНИСТРАТОРА</button>
+            </form>
+
+            <div class="warning">
+                ⚠️ Эта страница доступна только до создания первого администратора
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('setup-form');
+        const errorDiv = document.getElementById('error-message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorDiv.style.display = 'none';
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm').value;
+
+            if (password !== confirm) {
+                errorDiv.textContent = '❌ Пароли не совпадают';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/auth/setup-admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    window.location.href = '/admin';
+                } else {
+                    const error = await response.json();
+                    errorDiv.textContent = error.detail || '❌ Ошибка при создании администратора';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errorDiv.textContent = '❌ Ошибка соединения с сервером';
+                errorDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

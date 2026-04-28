@@ -133,3 +133,8 @@ async def admin_panel(request: Request):
 @router.get("/news", response_class=HTMLResponse)
 async def news_page(request: Request):
     return HTMLResponse(content=read_html("news.html"))
+
+@router.get("/admin/setup", response_class=HTMLResponse)
+async def admin_setup_page(request: Request):
+    """Страница создания первого администратора"""
+    return HTMLResponse(content=read_html("admin/setup.html"))
