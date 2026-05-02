@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-    <!-- Навигация -->
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
     <nav class="navbar">
         <div class="container">
             <div class="logo">
@@ -18,39 +20,35 @@
                 <a href="/#analysis">Аналитика</a>
                 <a href="/#services">Услуги</a>
             </div>
-            <div>
+            <div class="nav-buttons" id="nav-buttons">
                 <button class="btn-glow" onclick="openLoginModal()">ВОЙТИ</button>
-                <a href="/register" class="btn-primary" style="margin-left: 10px;">РЕГИСТРАЦИЯ</a>
+                <a href="/register" class="btn-primary">РЕГИСТРАЦИЯ</a>
             </div>
         </div>
     </nav>
 
-    <!-- Секция регистрации -->
     <section class="auth-section">
         <div class="container">
             <div class="auth-container">
-                <!-- Форма регистрации -->
                 <div class="auth-card">
                     <h2 class="auth-title">
                         СОЗДАТЬ<br>
                         <span class="pink">АККАУНТ</span>
                     </h2>
 
-                    {% if error %}
-                        <div class="error-banner">{{ error }}</div>
-                    {% endif %}
+                    <!-- Блок для ошибок (скрыт по умолчанию) -->
+                    <div id="error-banner" class="error-banner" style="display: none;"></div>
 
-                    <form class="auth-form" action="/register" method="POST">
+                    <form class="auth-form" id="register-form">
                         <div class="form-group">
                             <label for="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</label>
                             <input
                                 type="text"
                                 id="username"
                                 name="username"
-                                placeholder="crypto_master"
+                                placeholder="vasya_pupkin"
                                 required
                                 minlength="3"
-                                value="{{ username or '' }}"
                             >
                             <div class="input-hint">От 3 до 20 символов</div>
                         </div>
@@ -63,7 +61,6 @@
                                 name="email"
                                 placeholder="your@email.com"
                                 required
-                                value="{{ email or '' }}"
                             >
                         </div>
 
@@ -87,7 +84,6 @@
                                 id="confirm_password"
                                 placeholder="••••••••"
                                 required
-                                oninput="checkPasswords()"
                             >
                             <div id="password-error" class="error-message"></div>
                         </div>
@@ -110,13 +106,12 @@
                     </p>
                 </div>
 
-                <!-- Блок преимуществ -->
+                <!-- Блок преимуществ (без изменений) -->
                 <div class="auth-benefits">
                     <h2 class="benefits-title">
                         ПОЧЕМУ<br>
                         <span class="pink">КРИПТО ХАБ?</span>
                     </h2>
-
                     <ul class="benefits-list">
                         <li>🔹 Мгновенный доступ к аналитике</li>
                         <li>🔹 Персональные торговые сигналы</li>
@@ -124,7 +119,6 @@
                         <li>🔹 Круглосуточная поддержка</li>
                         <li>🔹 Защита активов</li>
                     </ul>
-
                     <div class="benefits-stats">
                         <div class="benefit-stat">
                             <div class="stat-number" id="total-users">0</div>
@@ -140,12 +134,11 @@
         </div>
     </section>
 
-    <!-- Модальное окно входа -->
+    <!-- Модалка входа (та же, что и на других страницах) -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
             <h2 class="modal-title">ВХОД В <span class="pink">СИСТЕМУ</span></h2>
-
             <form class="auth-form" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label>EMAIL</label>
@@ -161,68 +154,119 @@
     </div>
 
     <script>
-        // Проверка паролей
-        function checkPasswords() {
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirm_password').value;
-            const errorDiv = document.getElementById('password-error');
-            const submitBtn = document.getElementById('submit-btn');
+        // === Проверка паролей ===
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirm_password');
+        const passwordError = document.getElementById('password-error');
+        const submitBtn = document.getElementById('submit-btn');
 
-            if (confirm && password !== confirm) {
-                errorDiv.textContent = '❌ Пароли не совпадают';
-                errorDiv.style.display = 'block';
+        function validatePasswords() {
+            if (confirmInput.value && passwordInput.value !== confirmInput.value) {
+                passwordError.textContent = '❌ Пароли не совпадают';
+                passwordError.style.display = 'block';
                 submitBtn.disabled = true;
                 submitBtn.style.opacity = '0.5';
             } else {
-                errorDiv.style.display = 'none';
+                passwordError.style.display = 'none';
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
             }
         }
+        confirmInput.addEventListener('input', validatePasswords);
 
-        // Модальное окно
+        // === Обработка отправки формы регистрации ===
+        const registerForm = document.getElementById('register-form');
+        const errorBanner = document.getElementById('error-banner');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorBanner.style.display = 'none';
+
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = passwordInput.value;
+            const confirm = confirmInput.value;
+
+            if (password !== confirm) {
+                passwordError.textContent = '❌ Пароли не совпадают';
+                passwordError.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/v1/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                if (response.ok) {
+                    // Успешная регистрация — сохраняем токен и переходим в профиль
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                    window.location.href = '/profile';
+                } else {
+                    const err = await response.json();
+                    throw new Error(err.detail || 'Ошибка регистрации');
+                }
+            } catch (error) {
+                errorBanner.textContent = error.message;
+                errorBanner.style.display = 'block';
+            }
+        });
+
+        // === Модальное окно входа ===
         function openLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
         }
-
         function closeLoginModal() {
             document.getElementById('loginModal').style.display = 'none';
         }
-
         window.onclick = function(event) {
             const modal = document.getElementById('loginModal');
-            if (event.target == modal) {
-                closeLoginModal();
+            if (event.target == modal) closeLoginModal();
+        };
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: email, password: password })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                    window.location.href = '/profile';
+                } else {
+                    const err = await response.json();
+                    alert(err.detail || 'Ошибка входа');
+                }
+            } catch (err) {
+                alert('Ошибка соединения с сервером');
             }
         }
 
-        function handleLogin(event) {
-            event.preventDefault();
-            alert('Демо-режим: вход в систему');
-            closeLoginModal();
-        }
-
-        // Загрузка статистики
+        // === Загрузка статистики для преимуществ ===
         async function loadStats() {
             try {
                 const response = await fetch('/api/v1/dashboard/kpi');
-                const data = await response.json();
-
-                if (data) {
+                if (response.ok) {
+                    const data = await response.json();
                     document.getElementById('total-users').textContent = data.clients?.total || 0;
                     document.getElementById('total-volume').textContent =
                         (data.financial?.total_amount || 0).toLocaleString() + '₽';
                 }
             } catch (error) {
-                console.error('Ошибка загрузки:', error);
+                console.error('Ошибка загрузки статистики:', error);
             }
         }
-
         document.addEventListener('DOMContentLoaded', loadStats);
     </script>
-
-<script src="/static/js/main.js"></script>
-
-
 </body>
 </html>

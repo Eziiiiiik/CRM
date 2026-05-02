@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Каталог — ООО «Техно-Комфорт»</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <span class="pink">ТЕХНО</span> КОМФОРТ
+            </div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/catalog" class="active">Каталог</a>
+                <a href="/services">Услуги</a>
+                <a href="/about">О нас</a>
+                <a href="/contacts">Контакты</a>
+            </div>
+            <div class="nav-buttons" id="nav-buttons"></div>
+        </div>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="container">
+            <h1>Каталог <span class="pink">оборудования</span></h1>
+            <p>Широкий ассортимент отопительного и климатического оборудования от ведущих производителей.</p>
+
+            <div class="services-grid" style="margin-top: 40px;">
+                <div class="service-card"><span class="service-icon">🔥</span><h3>Котельное оборудование</h3></div>
+                <div class="service-card"><span class="service-icon">❄️</span><h3>Климатическое оборудование</h3></div>
+                <div class="service-card"><span class="service-icon">💧</span><h3>Газовые водонагреватели</h3></div>
+                <div class="service-card"><span class="service-icon">⚡</span><h3>Электрические водонагреватели</h3></div>
+                <div class="service-card"><span class="service-icon">🔩</span><h3>Стальные радиаторы</h3></div>
+                <div class="service-card"><span class="service-icon">🔧</span><h3>Алюминиевые радиаторы</h3></div>
+                <div class="service-card"><span class="service-icon">🏭</span><h3>Дымоходы</h3></div>
+                <div class="service-card"><span class="service-icon">🚿</span><h3>Насосное оборудование</h3></div>
+                <div class="service-card"><span class="service-icon">🌡️</span><h3>Электрический теплый пол</h3></div>
+                <div class="service-card"><span class="service-icon">🛠️</span><h3>Запчасти для котлов</h3></div>
+            </div>
+
+            <div style="margin-top: 50px;">
+                <h2>Полный перечень товаров</h2>
+                <ul style="color: var(--text-dim); line-height: 2;">
+                    <li>Котлы газовые настенные и напольные</li>
+                    <li>Сплит-системы, кондиционеры</li>
+                    <li>Газовые колонки</li>
+                    <li>Конденсационные котлы</li>
+                    <li>Бойлеры, водонагреватели</li>
+                    <li>Полипропиленовые трубы и фитинги</li>
+                    <li>Металлопластиковые трубы</li>
+                    <li>Сшитый полиэтилен</li>
+                    <li>Бойлеры косвенного нагрева</li>
+                    <li>Твердотопливные котлы</li>
+                    <li>Электрокотлы</li>
+                    <li>Насосы, насосные станции, циркуляционные насосы</li>
+                    <li>Запчасти для котлов</li>
+                    <li>Электрический теплый пол</li>
+                    <li>СИКЗ, САКЗ</li>
+                    <li>Газовые счетчики, узлы учета тепла и газа</li>
+                    <li>СГ-ТК-Д, ГРПШ и ШРП</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">© 2018–2026 ООО «Техно-Комфорт»</div>
+                <div class="footer-links">
+                    <a href="/catalog">Каталог</a>
+                    <a href="/delivery">Доставка и оплата</a>
+                    <a href="/about">О нас</a>
+                    <a href="/contacts">Контакты</a>
+                    <a href="/terms">Пользовательское соглашение</a>
+                    <a href="/articles">Статьи</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">...</div> <!-- модалка как в index.html -->
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        // Функции модалки
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        window.onclick = function(e) { if (e.target == document.getElementById('loginModal')) closeLoginModal(); };
+        async function handleLogin(e) {
+            e.preventDefault();
+            // стандартный fetch на /api/v1/auth/login
+        }
+    </script>
+</body>
+</html>

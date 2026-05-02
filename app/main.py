@@ -134,6 +134,34 @@ async def admin_panel(request: Request):
         return RedirectResponse(url="/admin/setup", status_code=303)
     return HTMLResponse(content=read_html("admin/index.html"))
 
+@frontend_router.get("/catalog", response_class=HTMLResponse)
+async def catalog_page(request: Request):
+    return HTMLResponse(content=read_html("catalog.html"))
+
+@frontend_router.get("/services", response_class=HTMLResponse)
+async def services_page(request: Request):
+    return HTMLResponse(content=read_html("services.html"))
+
+@frontend_router.get("/delivery", response_class=HTMLResponse)
+async def delivery_page(request: Request):
+    return HTMLResponse(content=read_html("delivery.html"))
+
+@frontend_router.get("/about", response_class=HTMLResponse)
+async def about_page(request: Request):
+    return HTMLResponse(content=read_html("about.html"))
+
+@frontend_router.get("/contacts", response_class=HTMLResponse)
+async def contacts_page(request: Request):
+    return HTMLResponse(content=read_html("contacts.html"))
+
+@frontend_router.get("/articles", response_class=HTMLResponse)
+async def articles_page(request: Request):
+    return HTMLResponse(content=read_html("articles.html"))
+
+@frontend_router.get("/terms", response_class=HTMLResponse)
+async def terms_page(request: Request):
+    return HTMLResponse(content=read_html("terms.html"))
+
 # ===== WEBSOCKET ДЛЯ УВЕДОМЛЕНИЙ =====
 @app.websocket("/ws/{user_id}")
 async def websocket_notifications(websocket: WebSocket, user_id: int):
