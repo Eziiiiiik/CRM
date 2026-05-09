@@ -1,58 +1,58 @@
-use serde::{Deserialize, Serialize};
+use axum::{Json, extract::State};
+use crate::models::CallRecord;
 use sqlx::SqlitePool;
+use uuid::Uuid;
+use chrono::Utc;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VoximplantCallWebhook {
-    pub event: String,
+#[derive(Debug, serde::Deserialize)]
+pub struct VoximplantWebhook {
     pub call_id: String,
     pub caller_number: String,
     pub callee_number: String,
-    pub duration: Option<u64>,
-    pub recording_url: Option<String>,
-    pub text: Option<String>,
-    pub is_final: Option<bool>,
+    pub event: String,
+    pub duration: Option<u32>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct VoximplantSmsWebhook {
-    pub message_id: String,
-    pub from: String,
-    pub to: String,
-    pub text: String,
-    pub timestamp: String,
-}
+pub async fn handle_voximplant_webhook(
+    State(pool): State<SqlitePool>,
+    Json(payload): Json<VoximplantWebhook>,
+) -> &'static str {
+    println!("📞 Входящий вебхук: {:?}", payload);
 
-pub async fn handle_call_webhook(
-    _pool: &SqlitePool,
-    payload: &VoximplantCallWebhook,
-) -> Result<(), anyhow::Error> {
-    println!("📞 Обработка звонка: call_id={}, from={}, to={}, duration={:?}",
-             payload.call_id,
-             payload.caller_number,
-             payload.callee_number,
-             payload.duration
-    );
+    if payload.event == "call_started" {
+        // Ищем номер в БД
+        let phone = sqlx::query!(
+            "SELECT id, client_id FROM phone_numbers WHERE number = ?",
+            payload.callee_number
+        )
+            .fetch_optional(&pool)
+            .await
+            .unwrap();
 
-    // TODO: найти номер в БД, найти клиента, сохранить запись о звонке
-    // Пока просто логируем
+        if let Some(phone) = phone {
+            // Сохраняем входящий звонок
+            let _ = sqlx::query!(
+                r#"
+                INSERT INTO call_records (id, call_id, phone_number_id, client_id, direction,
+                                           caller_number, callee_number, duration, cost, status, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                "#,
+                Uuid::new_v4().to_string(),
+                payload.call_id,
+                phone.id,
+                phone.client_id,
+                "incoming",
+                payload.caller_number,
+                payload.callee_number,
+                0,
+                0.0,
+                "ringing",
+                Utc::now().to_rfc3339()
+            )
+                .execute(&pool)
+                .await;
+        }
+    }
 
-    Ok(())
-}
-
-pub async fn handle_sms_webhook(
-    _pool: &SqlitePool,
-    payload: &VoximplantSmsWebhook,
-) -> Result<(), anyhow::Error> {
-    println!("💬 Обработка SMS: message_id={}, from={}, to={}, text={}",
-             payload.message_id,
-             payload.from,
-             payload.to,
-             &payload.text[..payload.text.len().min(50)]
-    );
-
-    // TODO: сохранить SMS в БД
-    // TODO: отправить уведомление клиенту
-    // Пока просто логируем
-
-    Ok(())
+    "OK"
 }

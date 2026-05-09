@@ -8,8 +8,9 @@ pub struct Config {
     // Voximplant
     pub voximplant_account_id: String,
     pub voximplant_api_key: String,
-    pub voximplant_api_secret: String,
-    pub voximplant_webhook_secret: String,
+    // Убираем API_SECRET и WEBHOOK_SECRET
+    // pub voximplant_api_secret: String,
+    // pub voximplant_webhook_secret: String,
 
     // База данных
     pub database_url: String,
@@ -17,7 +18,7 @@ pub struct Config {
     // FastAPI
     pub fastapi_url: String,
 
-    // Билдинг
+    // Билинг
     pub voice_price_per_minute: f64,
     pub sms_price: f64,
 }
@@ -35,8 +36,9 @@ impl Config {
 
             voximplant_account_id: std::env::var("VOXIMPLANT_ACCOUNT_ID").expect("VOXIMPLANT_ACCOUNT_ID not set"),
             voximplant_api_key: std::env::var("VOXIMPLANT_API_KEY").expect("VOXIMPLANT_API_KEY not set"),
-            voximplant_api_secret: std::env::var("VOXIMPLANT_API_SECRET").expect("VOXIMPLANT_API_SECRET not set"),
-            voximplant_webhook_secret: std::env::var("VOXIMPLANT_WEBHOOK_SECRET").unwrap_or_default(),
+            // Убираем ненужные переменные
+            // voximplant_api_secret: std::env::var("VOXIMPLANT_API_SECRET").unwrap_or_default(),
+            // voximplant_webhook_secret: std::env::var("VOXIMPLANT_WEBHOOK_SECRET").unwrap_or_default(),
 
             database_url: std::env::var("DATABASE_URL").expect("DATABASE_URL not set"),
             fastapi_url: std::env::var("FASTAPI_URL").unwrap_or_else(|_| "http://fastapi:8001".to_string()),
