@@ -83,56 +83,56 @@
         </div>
     </section>
 
-    <!-- Категории товаров -->
+    <!-- Категории товаров (кликабельные) -->
     <section class="services">
         <div class="container">
             <h2 class="section-title">Каталог <span class="pink">оборудования</span></h2>
             <div class="services-grid">
-                <div class="service-card">
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🔥</span>
                     <h3>Котельное оборудование</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">❄️</span>
                     <h3>Климатическое оборудование</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">💧</span>
                     <h3>Газовые водонагреватели</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">⚡</span>
                     <h3>Электрические водонагреватели</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🔩</span>
                     <h3>Стальные радиаторы</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🔧</span>
                     <h3>Алюминиевые радиаторы</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🏭</span>
                     <h3>Дымоходы</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🚿</span>
                     <h3>Насосное оборудование</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🌡️</span>
                     <h3>Электрический теплый пол</h3>
-                </div>
-                <div class="service-card">
+                </a>
+                <a href="/catalog" class="service-card" style="text-decoration: none; color: inherit;">
                     <span class="service-icon">🛠️</span>
                     <h3>Запчасти для котлов</h3>
-                </div>
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Блок услуг (сокращённо) -->
+    <!-- Блок услуг (теперь каждая карточка — ссылка) -->
     <section class="analysis">
         <div class="container">
             <h2 class="section-title">Наши <span class="pink">услуги</span></h2>
@@ -140,30 +140,30 @@
                 Профессиональный монтаж и обслуживание отопительных систем любой сложности
             </p>
             <div class="analysis-grid">
-                <div class="analysis-card">
+                <a href="/service/to-vdgo" class="analysis-card" style="text-decoration: none; color: inherit; display: block;">
                     <h3>ТО ВДГО</h3>
                     <p>Техническое обслуживание газового оборудования (3 тарифа: Стандарт, Премиум, Люкс)</p>
-                </div>
-                <div class="analysis-card highlight">
+                </a>
+                <a href="/service/vodosnabzhenie" class="analysis-card highlight" style="text-decoration: none; color: inherit; display: block;">
                     <h3>Монтаж водоснабжения</h3>
                     <p>Прокладка и подключение систем водоснабжения</p>
-                </div>
-                <div class="analysis-card">
+                </a>
+                <a href="/service/split" class="analysis-card" style="text-decoration: none; color: inherit; display: block;">
                     <h3>Монтаж сплит-систем</h3>
                     <p>Установка кондиционеров и сплит-систем любой мощности</p>
-                </div>
-                <div class="analysis-card">
+                </a>
+                <a href="/service/heating" class="analysis-card" style="text-decoration: none; color: inherit; display: block;">
                     <h3>Монтаж отопления</h3>
                     <p>Отопление «под ключ»: расчёт, оборудование, монтаж, запуск</p>
-                </div>
-                <div class="analysis-card">
+                </a>
+                <a href="/service/gas-repair" class="analysis-card" style="text-decoration: none; color: inherit; display: block;">
                     <h3>Ремонт газового оборудования</h3>
                     <p>Диагностика и ремонт котлов, колонок, плит</p>
-                </div>
-                <div class="analysis-card">
+                </a>
+                <a href="/service/service-center" class="analysis-card" style="text-decoration: none; color: inherit; display: block;">
                     <h3>Авторизованный сервисный центр</h3>
                     <p>Гарантийное и постгарантийное обслуживание</p>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -207,7 +207,7 @@
         </div>
     </footer>
 
-    <!-- Модалка входа (та же, что и на других страницах) -->
+    <!-- Модалка входа -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
@@ -231,7 +231,6 @@
 
     <script src="/static/js/main.js"></script>
     <script>
-        // Функции модалки, оставлены для совместимости
         function openLoginModal() {
             document.getElementById('loginModal').style.display = 'flex';
         }

@@ -161,6 +161,29 @@ async def articles_page(request: Request):
 @frontend_router.get("/terms", response_class=HTMLResponse)
 async def terms_page(request: Request):
     return HTMLResponse(content=read_html("terms.html"))
+@frontend_router.get("/service/to-vdgo", response_class=HTMLResponse)
+async def service_to_vdgo(request: Request):
+    return HTMLResponse(content=read_html("service/to-vdgo.html"))
+
+@frontend_router.get("/service/vodosnabzhenie", response_class=HTMLResponse)
+async def service_vodosnabzhenie(request: Request):
+    return HTMLResponse(content=read_html("service/vodosnabzhenie.html"))
+
+@frontend_router.get("/service/split", response_class=HTMLResponse)
+async def service_split(request: Request):
+    return HTMLResponse(content=read_html("service/split.html"))
+
+@frontend_router.get("/service/heating", response_class=HTMLResponse)
+async def service_heating(request: Request):
+    return HTMLResponse(content=read_html("service/heating.html"))
+
+@frontend_router.get("/service/gas-repair", response_class=HTMLResponse)
+async def service_gas_repair(request: Request):
+    return HTMLResponse(content=read_html("service/gas-repair.html"))
+
+@frontend_router.get("/service/service-center", response_class=HTMLResponse)
+async def service_service_center(request: Request):
+    return HTMLResponse(content=read_html("service/service-center.html"))
 
 # ===== WEBSOCKET ДЛЯ УВЕДОМЛЕНИЙ =====
 @app.websocket("/ws/{user_id}")

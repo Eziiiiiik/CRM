@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ТО ВДГО — ООО «Техно-Комфорт»</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .service-wrapper { display: flex; gap: 30px; }
+        .sidebar { width: 260px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,0,255,0.3); padding: 20px; border-radius: 8px; }
+        .sidebar h3 { color: var(--pink); margin-bottom: 15px; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: 8px; }
+        .sidebar a { color: var(--text-dim); text-decoration: none; }
+        .sidebar a:hover { color: var(--pink); }
+        .tariff { background: rgba(255,0,255,0.05); border: 1px solid rgba(255,0,255,0.2); padding: 20px; margin-bottom: 20px; border-radius: 8px; }
+        .tariff h3 { color: var(--pink); margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><span class="pink">ТЕХНО</span> КОМФОРТ</div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/catalog">Каталог</a>
+                <a href="/services" class="active">Услуги</a>
+                <a href="/about">О нас</a>
+                <a href="/contacts">Контакты</a>
+            </div>
+            <div class="nav-buttons" id="nav-buttons"></div>
+        </div>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="service-wrapper">
+                <aside class="sidebar">
+                    <h3>Услуги</h3>
+                    <ul>
+                        <li><a href="/service/to-vdgo">ТО ВДГО</a></li>
+                        <li><a href="/service/vodosnabzhenie">Монтаж водоснабжения</a></li>
+                        <li><a href="/service/split">Монтаж сплит-систем</a></li>
+                        <li><a href="/service/heating">Монтаж отопления</a></li>
+                        <li><a href="/service/gas-repair">Ремонт газового оборудования</a></li>
+                        <li><a href="/service/service-center">Авторизованный сервисный центр</a></li>
+                    </ul>
+                    <h3>Категории</h3>
+                    <ul>
+                        <li><a href="/catalog">Котельное оборудование</a></li>
+                        <li><a href="/catalog">Климатическое оборудование</a></li>
+                        <li><a href="/catalog">Газовые водонагреватели</a></li>
+                        <li><a href="/catalog">Электрические водонагреватели</a></li>
+                        <li><a href="/catalog">Стальные радиаторы</a></li>
+                        <li><a href="/catalog">Алюминиевые радиаторы</a></li>
+                        <li><a href="/catalog">Дымоходы</a></li>
+                        <li><a href="/catalog">Насосное оборудование</a></li>
+                        <li><a href="/catalog">Электрический теплый пол</a></li>
+                        <li><a href="/catalog">Запчасти для котлов</a></li>
+                    </ul>
+                </aside>
+                <div style="flex:1;">
+                    <h1>ТО ВДГО</h1>
+                    <p>Проживаете в частном доме или квартире с индивидуальным отоплением? Согласно постановлению Правительства РФ от 14.05.2013 г. №410 «О мерах по обеспечению безопасности при использовании и содержании внутридомового и внутриквартирного газового оборудования», «Правил поставки газа для обеспечения коммунально-бытовых нужд граждан», утвержденных Постановлением Правительства РФ №549 от 21.07.2008 г. Вам необходимо заключить Договор на техническое обслуживание и ежегодно проводить ТО ВДГО.</p>
+                    <p>В компании «Техно-Комфорт» имеются 3 вида Договора на ТО ВДГО. Вы сможете выбрать тот, который будет отвечать Вашим потребностям на 100%.</p>
+                    <p>Наша компания имеет в своем штате квалифицированных инженеров и весь спектр современного оборудования.</p>
+
+                    <div class="tariff">
+                        <h3>Договор "Стандарт" – 1500₽</h3>
+                        <ul>
+                            <li>- визуальная проверка целостности и соответствия нормативным требованиям (осмотр) ВДГО;</li>
+                            <li>- визуальная проверка наличия свободного доступа (осмотр) ВДГО;</li>
+                            <li>- визуальная проверка состояния окраски и креплений газопровода (осмотр);</li>
+                            <li>- визуальная проверка наличия и целостности футляров в местах прокладки через наружные и внутренние конструкции многоквартирных домов и домовладений (осмотр);</li>
+                            <li>- проверка герметичности соединений и отключающих устройств приборным методом;</li>
+                            <li>- проверка работоспособности устройств, позволяющих автоматически отключить подачу газа при отклонении контролируемых параметров за допустимые пределы, ее наладка и регулировка;</li>
+                            <li>- регулировка процесса сжигания на всех режимах работы, очистка горелок от загрязнений;</li>
+                            <li>- проверка работы манометров и термометров;</li>
+                            <li>- проверка наличия тяги в дымовых и вентиляционных каналах, состояния соединительных труб с дымовым каналом;</li>
+                            <li>- инструктаж потребителей газа по безопасному использованию газа при удовлетворении коммунально-бытовых нужд;</li>
+                            <li>- проверка работы насоса;</li>
+                            <li>- ревизия механических фильтров;</li>
+                            <li>- настройка и проверка работы расширительного бака.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tariff">
+                        <h3>Договор «Премиум» - 2300₽</h3>
+                        <ul>
+                            <li>Все работы "Стандарта" плюс:</li>
+                            <li>- проверка работы насоса, ревизия механических фильтров, настройка расширительного бака;</li>
+                            <li>- к обслуживаемому оборудованию добавляется счетчик и газовая плита.</li>
+                        </ul>
+                    </div>
+
+                    <div class="tariff">
+                        <h3>Договор «Люкс» - 3300₽</h3>
+                        <ul>
+                            <li>Все работы "Премиума" плюс:</li>
+                            <li>- включено 2 бесплатных выезда по ремонту.</li>
+                        </ul>
+                    </div>
+                    <p style="color: var(--pink);">Все договоры заключаются на год. Оборудование сертифицировано.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">© 2018–2026 ООО «Техно-Комфорт»</div>
+                <div class="footer-links">
+                    <a href="/catalog">Каталог</a>
+                    <a href="/delivery">Доставка и оплата</a>
+                    <a href="/about">О нас</a>
+                    <a href="/contacts">Контакты</a>
+                    <a href="/terms">Пользовательское соглашение</a>
+                    <a href="/articles">Статьи</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 class="modal-title">ВХОД В <span class="pink">СИСТЕМУ</span></h2>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">ВОЙТИ</button>
+            </form>
+            <p class="modal-footer">Нет аккаунта? <a href="/register" class="pink">Зарегистрироваться</a></p>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == document.getElementById('loginModal')) closeLoginModal(); };
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.querySelector('#loginModal input[type="email"]').value;
+            const password = document.querySelector('#loginModal input[type="password"]').value;
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: email, password: password })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                    closeLoginModal();
+                    window.location.href = '/profile';
+                } else {
+                    const err = await response.json();
+                    alert(err.detail || 'Ошибка входа');
+                }
+            } catch (err) {
+                alert('Ошибка соединения с сервером');
+            }
+        }
+    </script>
+</body>
+</html>

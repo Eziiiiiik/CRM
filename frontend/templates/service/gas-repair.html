@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ремонт газового оборудования — ООО «Техно-Комфорт»</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        .service-wrapper { display: flex; gap: 30px; }
+        .sidebar { width: 260px; background: rgba(0,0,0,0.8); border: 1px solid rgba(255,0,255,0.3); padding: 20px; border-radius: 8px; }
+        .sidebar h3 { color: var(--pink); margin-bottom: 15px; }
+        .sidebar ul { list-style: none; }
+        .sidebar li { margin-bottom: 8px; }
+        .sidebar a { color: var(--text-dim); text-decoration: none; }
+        .sidebar a:hover { color: var(--pink); }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo"><span class="pink">ТЕХНО</span> КОМФОРТ</div>
+            <div class="nav-links">
+                <a href="/">Главная</a>
+                <a href="/catalog">Каталог</a>
+                <a href="/services" class="active">Услуги</a>
+                <a href="/about">О нас</a>
+                <a href="/contacts">Контакты</a>
+            </div>
+            <div class="nav-buttons" id="nav-buttons"></div>
+        </div>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="container">
+            <div class="service-wrapper">
+                <aside class="sidebar">
+                    <h3>Услуги</h3>
+                    <ul>
+                        <li><a href="/service/to-vdgo">ТО ВДГО</a></li>
+                        <li><a href="/service/vodosnabzhenie">Монтаж водоснабжения</a></li>
+                        <li><a href="/service/split">Монтаж сплит-систем</a></li>
+                        <li><a href="/service/heating">Монтаж отопления</a></li>
+                        <li><a href="/service/gas-repair">Ремонт газового оборудования</a></li>
+                        <li><a href="/service/service-center">Авторизованный сервисный центр</a></li>
+                    </ul>
+                    <h3>Категории</h3>
+                    <ul>
+                        <li><a href="/catalog">Котельное оборудование</a></li>
+                        <li><a href="/catalog">Климатическое оборудование</a></li>
+                        <li><a href="/catalog">Газовые водонагреватели</a></li>
+                        <li><a href="/catalog">Электрические водонагреватели</a></li>
+                        <li><a href="/catalog">Стальные радиаторы</a></li>
+                        <li><a href="/catalog">Алюминиевые радиаторы</a></li>
+                        <li><a href="/catalog">Дымоходы</a></li>
+                        <li><a href="/catalog">Насосное оборудование</a></li>
+                        <li><a href="/catalog">Электрический теплый пол</a></li>
+                        <li><a href="/catalog">Запчасти для котлов</a></li>
+                    </ul>
+                </aside>
+                <div style="flex:1;">
+                    <h1>Ремонт газового оборудования</h1>
+                    <p>Выполняем диагностику и ремонт котлов, газовых колонок, плит, водонагревателей. Имеем склад запчастей для большинства моделей. Выезд мастера – в день обращения.</p>
+                    <p>Телефоны: +7 938 349 65 43, +7 988 086 44 57.</p>
+                    <p>Отопление под ключ в Кочубеевском, Невинномысске, Ставрополе и Ставропольском крае по самым низким ценам от компании "Техно-Комфорт": котлы газовые настенные и напольные, сплит-системы, газовые колонки, кондиционеры, конденсационные котлы, бойлеры, водонагреватели, полипропиленовые трубы и фитинги, металлопластиковые трубы, сшитый полиэтилен, бойлеры косвенного нагрева, твердотопливные котлы, электрокотлы, насосы, насосные станции, циркуляционные насосы, запчасти для котлов, электрический теплый пол,СИКЗ, САКЗ, газовые счетчики, узлы учета тепла и газа, СГ-ТК-Д, ГРПШ и ШРП и многое другое.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-copyright">© 2018–2026 ООО «Техно-Комфорт»</div>
+                <div class="footer-links">
+                    <a href="/catalog">Каталог</a>
+                    <a href="/delivery">Доставка и оплата</a>
+                    <a href="/about">О нас</a>
+                    <a href="/contacts">Контакты</a>
+                    <a href="/terms">Пользовательское соглашение</a>
+                    <a href="/articles">Статьи</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeLoginModal()">&times;</span>
+            <h2 class="modal-title">ВХОД В <span class="pink">СИСТЕМУ</span></h2>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" placeholder="your@email.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Пароль</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">ВОЙТИ</button>
+            </form>
+            <p class="modal-footer">Нет аккаунта? <a href="/register" class="pink">Зарегистрироваться</a></p>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script>
+        function openLoginModal() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
+        window.onclick = function(event) { if (event.target == document.getElementById('loginModal')) closeLoginModal(); };
+        async function handleLogin(event) {
+            event.preventDefault();
+            const email = document.querySelector('#loginModal input[type="email"]').value;
+            const password = document.querySelector('#loginModal input[type="password"]').value;
+            try {
+                const response = await fetch('/api/v1/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ username: email, password: password })
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('token', data.access_token);
+                    localStorage.setItem('user_id', data.user_id);
+                    closeLoginModal();
+                    window.location.href = '/profile';
+                } else {
+                    const err = await response.json();
+                    alert(err.detail || 'Ошибка входа');
+                }
+            } catch (err) {
+                alert('Ошибка соединения с сервером');
+            }
+        }
+    </script>
+</body>
+</html>

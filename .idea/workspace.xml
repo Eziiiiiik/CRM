@@ -26,20 +26,16 @@
     </cargoProject>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="Добавляю фичи про которые забыл, и всё также правлю фронтенд за своим кентом. Решил потихоньку на JS переходить, мне кажется так будет выглядеть эффектнее сайт, а не как по старинке, хотя хз хз">
-      <change afterPath="$PROJECT_DIR$/frontend/templates/about.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/articles.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/catalog.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/chat.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/contacts.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/delivery.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/services.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/templates/terms.html" afterDir="false" />
+    <list default="true" id="947568a7-c6ea-4851-b531-f023292aa25a" name="Changes" comment="начал под определённый сайт затачивать инфу, про то котлов, правил фронт">
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/gas-repair.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/heating.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/service-center.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/split.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/to-vdgo.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/templates/service/vodosnabzhenie.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/dashboard.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/templates/register.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,11 +134,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.14 (CRM)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="DEBUG_JUST_MY_CODE" value="true" />
       <module name="" />
       <option name="RUN_TOOL" value="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/run.py" />
@@ -252,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1777400491797</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="начал под определённый сайт затачивать инфу, про то котлов, правил фронт">
+      <option name="closed" value="true" />
+      <created>1777712652644</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1777712652644</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,6 +283,7 @@
     <MESSAGE value="Базы данных перекочевали из SQLite в PostgreSQL" />
     <MESSAGE value="Правлю фронтенд, у меня wsl отвалился, поэтому пока без докера и постгресса, потому что мне надо срочно презентовать свой проект" />
     <MESSAGE value="Добавляю фичи про которые забыл, и всё также правлю фронтенд за своим кентом. Решил потихоньку на JS переходить, мне кажется так будет выглядеть эффектнее сайт, а не как по старинке, хотя хз хз" />
-    <option name="LAST_COMMIT_MESSAGE" value="Добавляю фичи про которые забыл, и всё также правлю фронтенд за своим кентом. Решил потихоньку на JS переходить, мне кажется так будет выглядеть эффектнее сайт, а не как по старинке, хотя хз хз" />
+    <MESSAGE value="начал под определённый сайт затачивать инфу, про то котлов, правил фронт" />
+    <option name="LAST_COMMIT_MESSAGE" value="начал под определённый сайт затачивать инфу, про то котлов, правил фронт" />
   </component>
 </project>
