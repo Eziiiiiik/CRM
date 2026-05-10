@@ -1,7 +1,10 @@
-use axum::{Json, extract::State};
+// src/handlers/webhooks.rs
+use axum::{extract::{State, Json}, http::StatusCode, response::IntoResponse};
 use sqlx::SqlitePool;
-use uuid::Uuid;
 use chrono::Utc;
+use uuid::Uuid;
+
+use crate::models::CallStatus;
 
 #[derive(Debug, serde::Deserialize)]
 pub struct VoximplantWebhook {
@@ -16,62 +19,69 @@ pub struct VoximplantWebhook {
 pub async fn handle_voximplant_webhook(
     State(pool): State<SqlitePool>,
     Json(payload): Json<VoximplantWebhook>,
-) -> &'static str {
-    println!("📞 Получен вебхук: {:?}", payload);
+) -> impl IntoResponse {
 
-    // Просто логируем и возвращаем успех (без проверок подписи)
+    tracing::info!("📞 Получен вебхук: {:?}", payload);
+
     match payload.event.as_str() {
         "call_started" => {
-            println!("🔔 Входящий звонок от {} на {}", payload.caller_number, payload.callee_number);
+            tracing::info!("🔔 Входящий звонок от {} на {}", payload.caller_number, payload.callee_number);
 
-            // Ищем номер в БД
-            let phone = sqlx::query!(
+            let phone = sqlx::query(
                 "SELECT id, client_id FROM phone_numbers WHERE number = ?",
-                payload.callee_number
             )
+                .bind(&payload.callee_number)
                 .fetch_optional(&pool)
                 .await
-                .unwrap_or(None);
+                .ok()
+                .flatten();
 
             if let Some(phone) = phone {
-                // Сохраняем запись о звонке
-                let _ = sqlx::query!(
+                let now = Utc::now();
+                let phone_id: String = phone.get("id");
+                let client_id: Option<String> = phone.get("client_id");
+
+                let _ = sqlx::query(
                     r#"
-                    INSERT INTO call_records (id, call_id, phone_number_id, client_id, direction,
-                                               caller_number, callee_number, duration, cost, status, created_at)
+                    INSERT INTO call_records
+                        (id, call_id, phone_number_id, client_id, direction,
+                         caller_number, callee_number, duration, cost, status, created_at)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     "#,
-                    Uuid::new_v4().to_string(),
-                    payload.call_id,
-                    phone.id,
-                    phone.client_id,
-                    "incoming",
-                    payload.caller_number,
-                    payload.callee_number,
-                    0,
-                    0.0,
-                    "ringing",
-                    Utc::now().to_rfc3339()
                 )
+                    .bind(Uuid::new_v4().to_string())
+                    .bind(&payload.call_id)
+                    .bind(phone_id)
+                    .bind(client_id)
+                    .bind("incoming")
+                    .bind(&payload.caller_number)
+                    .bind(&payload.callee_number)
+                    .bind(0i32)
+                    .bind(0.0)
+                    .bind("ringing")
+                    .bind(now.to_rfc3339())
                     .execute(&pool)
                     .await;
+
+                tracing::info!("✅ Входящий звонок сохранён в БД");
+            } else {
+                tracing::warn!("⚠️ Номер {} не найден в БД", payload.callee_number);
             }
         }
         "call_finished" => {
-            println!("🏁 Звонок завершён, длительность: {:?} сек", payload.duration);
-            // Обновляем запись о звонке
-            let _ = sqlx::query!(
+            tracing::info!("🏁 Звонок завершён, длительность: {:?} сек", payload.duration);
+            let _ = sqlx::query(
                 "UPDATE call_records SET duration = ?, status = 'completed' WHERE call_id = ?",
-                payload.duration.unwrap_or(0) as i32,
-                payload.call_id
             )
+                .bind(payload.duration.unwrap_or(0) as i32)
+                .bind(&payload.call_id)
                 .execute(&pool)
                 .await;
         }
         _ => {
-            println!("❓ Неизвестное событие: {}", payload.event);
+            tracing::debug!("❓ Неизвестное событие: {}", payload.event);
         }
     }
 
-    "OK"
+    (StatusCode::OK, "OK")
 }

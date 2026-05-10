@@ -2,8 +2,10 @@ use sqlx::sqlite::SqlitePool;
 use sqlx::{SqlitePool as Pool, migrate::MigrateDatabase};
 
 pub async fn init_db(database_url: &str) -> Result<Pool, anyhow::Error> {
+    // Создаём базу данных если её нет
     if !sqlx::Sqlite::database_exists(database_url).await? {
         sqlx::Sqlite::create_database(database_url).await?;
+        println!("✅ База данных создана");
     }
 
     let pool = SqlitePool::connect(database_url).await?;

@@ -1,56 +1,57 @@
+// src/config.rs
 use serde::Deserialize;
 
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Clone, Deserialize)]
 pub struct Config {
     pub server_host: String,
     pub server_port: u16,
-
-    // Voximplant
-    pub voximplant_account_id: String,
-    pub voximplant_api_key: String,
-    // Убираем API_SECRET и WEBHOOK_SECRET
-    // pub voximplant_api_secret: String,
-    // pub voximplant_webhook_secret: String,
-
-    // База данных
     pub database_url: String,
 
-    // FastAPI
-    pub fastapi_url: String,
+    pub voximplant_account_id: String,
+    pub voximplant_api_key: String,
 
-    // Билинг
+    pub secret_key: String,
+    pub fastapi_url: Option<String>,
+
+    // Billing prices
+    #[serde(default = "default_voice_price")]
     pub voice_price_per_minute: f64,
+
+    #[serde(default = "default_sms_price")]
     pub sms_price: f64,
 }
 
+fn default_voice_price() -> f64 { 0.01 }
+fn default_sms_price() -> f64 { 0.005 }
+
 impl Config {
     pub fn from_env() -> Self {
-        dotenv::dotenv().ok();
+        dotenvy::dotenv().ok();
 
-        Self {
-            server_host: std::env::var("TELEPHONY_HOST").unwrap_or_else(|_| "0.0.0.0".to_string()),
+        Config {
+            server_host: std::env::var("TELEPHONY_HOST")
+                .unwrap_or_else(|_| "0.0.0.0".to_string()),
             server_port: std::env::var("TELEPHONY_PORT")
                 .unwrap_or_else(|_| "8003".to_string())
                 .parse()
                 .unwrap_or(8003),
-
-            voximplant_account_id: std::env::var("VOXIMPLANT_ACCOUNT_ID").expect("VOXIMPLANT_ACCOUNT_ID not set"),
-            voximplant_api_key: std::env::var("VOXIMPLANT_API_KEY").expect("VOXIMPLANT_API_KEY not set"),
-            // Убираем ненужные переменные
-            // voximplant_api_secret: std::env::var("VOXIMPLANT_API_SECRET").unwrap_or_default(),
-            // voximplant_webhook_secret: std::env::var("VOXIMPLANT_WEBHOOK_SECRET").unwrap_or_default(),
-
-            database_url: std::env::var("DATABASE_URL").expect("DATABASE_URL not set"),
-            fastapi_url: std::env::var("FASTAPI_URL").unwrap_or_else(|_| "http://fastapi:8001".to_string()),
-
+            database_url: std::env::var("TELEPHONY_DATABASE_URL")
+                .unwrap_or_else(|_| "sqlite:./telephony.db".to_string()),
+            voximplant_account_id: std::env::var("VOXIMPLANT_ACCOUNT_ID")
+                .expect("VOXIMPLANT_ACCOUNT_ID must be set"),
+            voximplant_api_key: std::env::var("VOXIMPLANT_API_KEY")
+                .expect("VOXIMPLANT_API_KEY must be set"),
+            secret_key: std::env::var("SECRET_KEY")
+                .expect("SECRET_KEY must be set"),
+            fastapi_url: std::env::var("FASTAPI_URL").ok(),
             voice_price_per_minute: std::env::var("VOICE_PRICE_PER_MINUTE")
-                .unwrap_or_else(|_| "0.01".to_string())
-                .parse()
-                .unwrap_or(0.01),
+                .ok()
+                .and_then(|v| v.parse().ok())
+                .unwrap_or_else(default_voice_price),
             sms_price: std::env::var("SMS_PRICE")
-                .unwrap_or_else(|_| "0.005".to_string())
-                .parse()
-                .unwrap_or(0.005),
+                .ok()
+                .and_then(|v| v.parse().ok())
+                .unwrap_or_else(default_sms_price),
         }
     }
 }

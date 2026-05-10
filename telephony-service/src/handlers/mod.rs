@@ -1,4 +1,4 @@
 pub mod numbers;
 pub mod clients;
-mod calls;
-mod webhooks;
+pub mod calls;
+pub mod webhooks;
